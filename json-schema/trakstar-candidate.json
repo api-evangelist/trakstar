@@ -1,0 +1,57 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/trakstar/main/json-schema/trakstar-candidate.json",
+  "title": "Trakstar Hire Candidate",
+  "description": "A candidate applying to a job opening in the Trakstar Hire system.",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "integer",
+      "description": "Unique identifier for the candidate.",
+      "readOnly": true
+    },
+    "first_name": {
+      "type": "string",
+      "description": "Candidate's first name."
+    },
+    "last_name": {
+      "type": "string",
+      "description": "Candidate's last name."
+    },
+    "email": {
+      "type": "string",
+      "format": "email",
+      "description": "Candidate's email address."
+    },
+    "phone": {
+      "type": ["string", "null"],
+      "description": "Candidate's phone number."
+    },
+    "opening": {
+      "type": "integer",
+      "description": "ID of the opening the candidate is applying to."
+    },
+    "stage": {
+      "type": ["string", "null"],
+      "description": "Current stage of the candidate in the hiring pipeline."
+    },
+    "source": {
+      "type": ["string", "null"],
+      "description": "Source of the candidate application."
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Timestamp when the candidate record was created.",
+      "readOnly": true
+    },
+    "updated_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Timestamp when the candidate record was last updated.",
+      "readOnly": true
+    }
+  },
+  "required": ["first_name", "last_name", "opening"],
+  "additionalProperties": false
+}

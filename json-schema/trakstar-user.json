@@ -1,0 +1,93 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/trakstar/main/json-schema/trakstar-user.json",
+  "title": "Trakstar Learn User",
+  "description": "A user account in the Trakstar Learn (Mindflash) learning management system.",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "integer",
+      "format": "int64",
+      "description": "Unique Mindflash user identifier.",
+      "readOnly": true
+    },
+    "name": {
+      "type": "string",
+      "description": "Full display name in Last, First format.",
+      "readOnly": true
+    },
+    "firstName": {
+      "type": "string",
+      "maxLength": 35,
+      "description": "User's first name."
+    },
+    "lastName": {
+      "type": "string",
+      "maxLength": 35,
+      "description": "User's last name."
+    },
+    "username": {
+      "type": "string",
+      "maxLength": 254,
+      "description": "Unique username for login."
+    },
+    "email": {
+      "type": "string",
+      "format": "email",
+      "maxLength": 254,
+      "description": "User's email address."
+    },
+    "status": {
+      "type": "string",
+      "description": "User's account status.",
+      "enum": ["Active", "Archived"]
+    },
+    "type": {
+      "type": "string",
+      "description": "User's role/type in the system.",
+      "enum": ["Trainee", "Trainer", "Manager", "Administrator", "Reporter", "Team Lead"]
+    },
+    "permissions": {
+      "type": "integer",
+      "description": "Numeric permission code for the user's role.",
+      "enum": [169000100, 169000200, 169000300, 169000400, 169000500, 169000600]
+    },
+    "isOwner": {
+      "type": "integer",
+      "description": "Whether this user is the account owner (1) or not (0).",
+      "enum": [0, 1]
+    },
+    "groups": {
+      "type": "array",
+      "description": "Groups the user belongs to.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "name": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "customfield0": { "type": "string", "description": "Custom field 0." },
+    "customfield1": { "type": "string", "description": "Custom field 1." },
+    "customfield2": { "type": "string", "description": "Custom field 2." },
+    "customfield3": { "type": "string", "description": "Custom field 3." },
+    "customfield4": { "type": "string", "description": "Custom field 4." },
+    "customfield5": { "type": "string", "description": "Custom field 5." },
+    "customfield6": { "type": "string", "description": "Custom field 6." },
+    "customfield7": { "type": "string", "description": "Custom field 7." },
+    "customfield8": { "type": "string", "description": "Custom field 8." },
+    "customfield9": { "type": "string", "description": "Custom field 9." },
+    "yammerId": {
+      "type": "string",
+      "description": "Yammer ID of the user."
+    }
+  },
+  "required": ["firstName", "lastName"],
+  "additionalProperties": true
+}

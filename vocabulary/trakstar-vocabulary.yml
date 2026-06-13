@@ -1,0 +1,194 @@
+vocabulary:
+  name: Trakstar API Vocabulary
+  description: >-
+    Domain vocabulary for Trakstar HR platform APIs, covering concepts from
+    the Hire (applicant tracking), Learn (learning management), Perform
+    (performance management), and Insights (analytics) product suite.
+  url: https://www.trakstar.com/
+  created: '2026-06-13'
+  terms:
+
+    # --- Trakstar Hire (ATS) terms ---
+    - term: Opening
+      definition: >-
+        A job opening or position within the Trakstar Hire applicant tracking
+        system. Represents a role that the organization is recruiting for and
+        can be in open, closed, or draft status.
+      domain: Hire
+      aliases:
+        - Job Opening
+        - Position
+        - Requisition
+
+    - term: Candidate
+      definition: >-
+        An individual who has applied to or been sourced for a job opening in
+        Trakstar Hire. Candidates progress through stages in the hiring pipeline
+        from application to offer.
+      domain: Hire
+      aliases:
+        - Applicant
+        - Job Seeker
+
+    - term: Stage
+      definition: >-
+        A step in the hiring pipeline that a candidate progresses through,
+        such as Application Review, Phone Screen, Interview, or Offer.
+      domain: Hire
+
+    - term: CandidateMessage
+      definition: >-
+        A message sent to a candidate through the Trakstar Hire platform,
+        typically used for scheduling communications and status updates.
+      domain: Hire
+      aliases:
+        - Message
+
+    - term: InternalNote
+      definition: >-
+        A private note recorded by a hiring team member about a candidate,
+        visible only to internal users and not shared with the candidate.
+      domain: Hire
+      aliases:
+        - Note
+        - Hiring Note
+
+    - term: Interview
+      definition: >-
+        A scheduled evaluation session between a candidate and one or more
+        interviewers as part of the hiring process.
+      domain: Hire
+
+    - term: Review
+      definition: >-
+        A structured assessment of a candidate completed by a reviewer after
+        an interview or evaluation, capturing ratings and feedback.
+      domain: Hire
+
+    - term: Evaluation
+      definition: >-
+        A scored assessment of a candidate's qualifications against defined
+        criteria for a job opening.
+      domain: Hire
+      aliases:
+        - Scorecard
+
+    - term: ToDo
+      definition: >-
+        An action item or task associated with a candidate or hiring process
+        step, assigned to a team member with an optional due date.
+      domain: Hire
+      aliases:
+        - Task
+        - Action Item
+
+    # --- Trakstar Learn (LMS) terms ---
+    - term: User
+      definition: >-
+        A person with an account in the Trakstar Learn (Mindflash) learning
+        management system. Users can have roles of Trainee, Trainer, Manager,
+        Administrator, Reporter, or Team Lead.
+      domain: Learn
+      aliases:
+        - Learner
+        - Trainee
+
+    - term: Group
+      definition: >-
+        A collection of users in Trakstar Learn used to organize learners and
+        manage course assignments in bulk.
+      domain: Learn
+      aliases:
+        - User Group
+        - Team
+
+    - term: Course
+      definition: >-
+        A structured learning program in Trakstar Learn consisting of one or
+        more modules. Courses can be required or optional for enrolled users.
+      domain: Learn
+      aliases:
+        - Training
+        - Learning Module
+
+    - term: Module
+      definition: >-
+        An individual unit of content within a Trakstar Learn course, such as
+        a video, quiz, or document.
+      domain: Learn
+      aliases:
+        - Lesson
+        - Content Unit
+
+    - term: Enrollment
+      definition: >-
+        The assignment of a user to a course or module in Trakstar Learn,
+        which may be marked as required or optional.
+      domain: Learn
+      aliases:
+        - Course Enrollment
+        - Assignment
+
+    - term: APIKey
+      definition: >-
+        A credential used to authenticate requests to Trakstar APIs. For Hire,
+        keys are generated in Super Admin settings. For Learn, keys are
+        provisioned by the support team upon request.
+      domain: All
+      aliases:
+        - API Key
+        - Access Key
+
+    - term: SSO
+      definition: >-
+        Single Sign-On integration that allows Trakstar Learn users to
+        authenticate using their organization's internal credentials via
+        pre-formed dashboard URLs returned by the Auth endpoint.
+      domain: Learn
+      aliases:
+        - Single Sign-On
+        - Federated Login
+
+    - term: Pagination
+      definition: >-
+        The mechanism used by Trakstar APIs to break large result sets into
+        pages. The Hire API uses limit/offset parameters. The Learn API also
+        supports pagination on collection endpoints.
+      domain: All
+
+    - term: RateLimit
+      definition: >-
+        The maximum number of API requests allowed in a given time window.
+        Trakstar Learn enforces a limit of 10 requests per 10 seconds per
+        API key.
+      domain: Learn
+      aliases:
+        - Rate Limit
+        - Request Throttle
+
+    - term: CustomField
+      definition: >-
+        User-defined metadata fields (customfield0 through customfield9) on
+        Trakstar Learn user accounts. Custom fields are configured in account
+        settings and can hold arbitrary string values such as department or
+        location.
+      domain: Learn
+      aliases:
+        - Custom Attribute
+
+    - term: BatchId
+      definition: >-
+        A unique sequential number provided by the API caller to identify a
+        specific batch add-users request. The ID is echoed back in the response
+        for reconciliation.
+      domain: Learn
+
+    - term: Permissions
+      definition: >-
+        A numeric code that specifies a user's role in Trakstar Learn.
+        Values: 169000100 (Trainee), 169000200 (Manager), 169000300 (Trainer),
+        169000400 (Administrator), 169000500 (Reporter), 169000600 (Team Lead).
+      domain: Learn
+      aliases:
+        - Role
+        - User Role

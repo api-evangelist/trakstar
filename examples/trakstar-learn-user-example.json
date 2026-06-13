@@ -1,0 +1,20 @@
+{
+  "id": 5056086330525,
+  "name": "Smith, Jane",
+  "firstName": "Jane",
+  "lastName": "Smith",
+  "username": "jsmith",
+  "email": "jsmith@yourorg.com",
+  "status": "Active",
+  "type": "Trainee",
+  "permissions": 169000100,
+  "isOwner": 0,
+  "groups": [
+    {
+      "id": 1662730984,
+      "name": "Engineering Team"
+    }
+  ],
+  "customfield0": "Austin",
+  "customfield1": "Full-Time"
+}

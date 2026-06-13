@@ -53,7 +53,7 @@ apis:
       - type: Documentation
         url: https://developers.recruiterbox.com/reference/introduction
       - type: OpenAPI
-        url: https://developers.recruiterbox.com/llms.txt
+        url: https://raw.githubusercontent.com/api-evangelist/trakstar/refs/heads/main/openapi/trakstar-hire-api-openapi.yml
     contact:
       - FN: Trakstar Hire Support
         url: https://support.hire.trakstar.com/article/1617-accessing-the-hire-api
@@ -78,6 +78,8 @@ apis:
     properties:
       - type: Documentation
         url: https://support.learn.trakstar.com/article/815-workflow-api-documentation
+      - type: OpenAPI
+        url: https://raw.githubusercontent.com/api-evangelist/trakstar/refs/heads/main/openapi/trakstar-learn-api-openapi.yml
     contact:
       - FN: Trakstar Learn Support
         email: learn@trakstar.com
@@ -105,6 +107,10 @@ common:
     url: rate-limits/trakstar-rate-limits.yml
   - type: FinOps
     url: finops/trakstar-finops.yml
+  - type: Vocabulary
+    url: https://raw.githubusercontent.com/api-evangelist/trakstar/refs/heads/main/vocabulary/trakstar-vocabulary.yml
+  - type: JSONLDContext
+    url: https://raw.githubusercontent.com/api-evangelist/trakstar/refs/heads/main/json-ld/trakstar-context.jsonld
 maintainers:
   - FN: Kin Lane
     email: kin@apievangelist.com

@@ -1,0 +1,49 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/trakstar/main/json-schema/trakstar-opening.json",
+  "title": "Trakstar Hire Opening",
+  "description": "A job opening / position in the Trakstar Hire applicant tracking system.",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "integer",
+      "description": "Unique identifier for the opening.",
+      "readOnly": true
+    },
+    "title": {
+      "type": "string",
+      "description": "Title of the job opening."
+    },
+    "status": {
+      "type": "string",
+      "description": "Current status of the opening.",
+      "enum": ["open", "closed", "draft"]
+    },
+    "department": {
+      "type": ["string", "null"],
+      "description": "Department associated with this opening."
+    },
+    "location": {
+      "type": ["string", "null"],
+      "description": "Job location."
+    },
+    "description": {
+      "type": ["string", "null"],
+      "description": "Full job description."
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Timestamp when the opening was created.",
+      "readOnly": true
+    },
+    "updated_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Timestamp when the opening was last updated.",
+      "readOnly": true
+    }
+  },
+  "required": ["title"],
+  "additionalProperties": false
+}

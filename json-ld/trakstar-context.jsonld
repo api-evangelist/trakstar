@@ -1,0 +1,233 @@
+{
+  "@context": {
+    "@version": 1.1,
+    "schema": "https://schema.org/",
+    "trakstar": "https://www.trakstar.com/vocab#",
+    "xsd": "http://www.w3.org/2001/XMLSchema#",
+
+    "Opening": {
+      "@id": "trakstar:Opening",
+      "@type": "@id"
+    },
+    "Candidate": {
+      "@id": "trakstar:Candidate",
+      "@type": "@id"
+    },
+    "Interview": {
+      "@id": "trakstar:Interview",
+      "@type": "@id"
+    },
+    "Review": {
+      "@id": "trakstar:Review",
+      "@type": "@id"
+    },
+    "Evaluation": {
+      "@id": "trakstar:Evaluation",
+      "@type": "@id"
+    },
+    "InternalNote": {
+      "@id": "trakstar:InternalNote",
+      "@type": "@id"
+    },
+    "CandidateMessage": {
+      "@id": "trakstar:CandidateMessage",
+      "@type": "@id"
+    },
+    "Todo": {
+      "@id": "trakstar:Todo",
+      "@type": "@id"
+    },
+    "User": {
+      "@id": "schema:Person",
+      "@type": "@id"
+    },
+    "Group": {
+      "@id": "schema:Organization",
+      "@type": "@id"
+    },
+    "Course": {
+      "@id": "schema:Course",
+      "@type": "@id"
+    },
+    "CourseEnrollment": {
+      "@id": "schema:CourseInstance",
+      "@type": "@id"
+    },
+
+    "id": "@id",
+    "type": "@type",
+
+    "title": {
+      "@id": "schema:title",
+      "@type": "xsd:string"
+    },
+    "name": {
+      "@id": "schema:name",
+      "@type": "xsd:string"
+    },
+    "description": {
+      "@id": "schema:description",
+      "@type": "xsd:string"
+    },
+    "status": {
+      "@id": "trakstar:status",
+      "@type": "xsd:string"
+    },
+    "department": {
+      "@id": "trakstar:department",
+      "@type": "xsd:string"
+    },
+    "location": {
+      "@id": "schema:jobLocation",
+      "@type": "xsd:string"
+    },
+    "created_at": {
+      "@id": "schema:dateCreated",
+      "@type": "xsd:dateTime"
+    },
+    "updated_at": {
+      "@id": "schema:dateModified",
+      "@type": "xsd:dateTime"
+    },
+    "opening": {
+      "@id": "trakstar:opening",
+      "@type": "@id"
+    },
+    "stage": {
+      "@id": "trakstar:stage",
+      "@type": "xsd:string"
+    },
+    "source": {
+      "@id": "trakstar:source",
+      "@type": "xsd:string"
+    },
+    "first_name": {
+      "@id": "schema:givenName",
+      "@type": "xsd:string"
+    },
+    "last_name": {
+      "@id": "schema:familyName",
+      "@type": "xsd:string"
+    },
+    "firstName": {
+      "@id": "schema:givenName",
+      "@type": "xsd:string"
+    },
+    "lastName": {
+      "@id": "schema:familyName",
+      "@type": "xsd:string"
+    },
+    "email": {
+      "@id": "schema:email",
+      "@type": "xsd:string"
+    },
+    "phone": {
+      "@id": "schema:telephone",
+      "@type": "xsd:string"
+    },
+    "username": {
+      "@id": "schema:identifier",
+      "@type": "xsd:string"
+    },
+    "groups": {
+      "@id": "schema:memberOf",
+      "@container": "@set"
+    },
+    "userCount": {
+      "@id": "trakstar:userCount",
+      "@type": "xsd:integer"
+    },
+    "permissions": {
+      "@id": "trakstar:permissions",
+      "@type": "xsd:integer"
+    },
+    "isOwner": {
+      "@id": "trakstar:isOwner",
+      "@type": "xsd:boolean"
+    },
+    "courses": {
+      "@id": "schema:hasCourse",
+      "@container": "@set"
+    },
+    "courseIds": {
+      "@id": "trakstar:courseIds",
+      "@container": "@set"
+    },
+    "groupIds": {
+      "@id": "trakstar:groupIds",
+      "@container": "@set"
+    },
+    "requiredCourseIds": {
+      "@id": "trakstar:requiredCourseIds",
+      "@container": "@set"
+    },
+    "required": {
+      "@id": "trakstar:required",
+      "@type": "xsd:boolean"
+    },
+    "clientDatestamp": {
+      "@id": "trakstar:clientDatestamp",
+      "@type": "xsd:date"
+    },
+    "batchId": {
+      "@id": "trakstar:batchId",
+      "@type": "xsd:integer"
+    },
+    "scheduled_at": {
+      "@id": "schema:startDate",
+      "@type": "xsd:dateTime"
+    },
+    "interviewer": {
+      "@id": "trakstar:interviewer",
+      "@type": "xsd:string"
+    },
+    "reviewer": {
+      "@id": "trakstar:reviewer",
+      "@type": "xsd:string"
+    },
+    "rating": {
+      "@id": "schema:ratingValue",
+      "@type": "xsd:string"
+    },
+    "comments": {
+      "@id": "schema:reviewBody",
+      "@type": "xsd:string"
+    },
+    "body": {
+      "@id": "schema:text",
+      "@type": "xsd:string"
+    },
+    "due_date": {
+      "@id": "schema:scheduledTime",
+      "@type": "xsd:date"
+    },
+    "completed": {
+      "@id": "trakstar:completed",
+      "@type": "xsd:boolean"
+    },
+    "subject": {
+      "@id": "schema:about",
+      "@type": "xsd:string"
+    },
+    "sent_at": {
+      "@id": "schema:dateSent",
+      "@type": "xsd:dateTime"
+    },
+    "dashboardUrl": {
+      "@id": "schema:url",
+      "@type": "@id"
+    },
+    "userId": {
+      "@id": "trakstar:userId",
+      "@type": "xsd:integer"
+    },
+    "userDisplayName": {
+      "@id": "schema:name",
+      "@type": "xsd:string"
+    },
+    "userEmail": {
+      "@id": "schema:email",
+      "@type": "xsd:string"
+    }
+  }
+}

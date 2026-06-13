@@ -1,0 +1,987 @@
+openapi: 3.0.3
+info:
+  title: Trakstar Hire API
+  description: >-
+    The Trakstar Hire REST API (formerly Recruiterbox) enables developers to manage
+    openings, candidates, candidate messages, internal notes, interviews, reviews,
+    evaluations, and to-dos programmatically. It returns JSON responses and uses API
+    key authentication generated from the account's Super Admin settings. The most
+    common use cases include building custom career sites and syncing opening or
+    candidate data with external systems.
+  version: '2'
+  contact:
+    name: Trakstar Hire Support
+    url: https://support.hire.trakstar.com/article/1617-accessing-the-hire-api
+  license:
+    name: Proprietary
+externalDocs:
+  description: Trakstar Hire API Reference
+  url: https://developers.recruiterbox.com/reference/introduction
+servers:
+  - url: https://{companyName}.hire.trakstar.com/api/v2
+    description: Trakstar Hire API v2
+    variables:
+      companyName:
+        description: Your company subdomain name
+        default: yourcompany
+security:
+  - apiKey: []
+tags:
+  - name: Openings
+    description: Manage job openings / positions
+  - name: Candidates
+    description: Manage job candidates
+  - name: Candidate Messages
+    description: Manage messages sent to candidates
+  - name: Internal Notes
+    description: Manage internal notes on candidates
+  - name: Interviews
+    description: Manage candidate interviews
+  - name: Reviews
+    description: Manage candidate reviews
+  - name: Evaluations
+    description: Manage candidate evaluations
+  - name: To-Dos
+    description: Manage to-do items
+paths:
+  /openings:
+    get:
+      operationId: listOpenings
+      summary: List Openings
+      description: Returns a paginated list of all job openings in the account.
+      tags:
+        - Openings
+      parameters:
+        - name: limit
+          in: query
+          description: Number of results per page.
+          required: false
+          schema:
+            type: integer
+            default: 10
+            maximum: 100
+        - name: offset
+          in: query
+          description: Number of results to skip for pagination.
+          required: false
+          schema:
+            type: integer
+            default: 0
+        - name: status
+          in: query
+          description: Filter openings by status.
+          required: false
+          schema:
+            type: string
+            enum:
+              - open
+              - closed
+              - draft
+      responses:
+        '200':
+          description: A list of openings.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    type: integer
+                    description: Total number of openings matching the query.
+                  next:
+                    type: string
+                    nullable: true
+                    description: URL for next page of results.
+                  previous:
+                    type: string
+                    nullable: true
+                    description: URL for previous page of results.
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Opening'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    post:
+      operationId: createOpening
+      summary: Create Opening
+      description: Creates a new job opening.
+      tags:
+        - Openings
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OpeningInput'
+      responses:
+        '201':
+          description: Opening created successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Opening'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /openings/{id}:
+    get:
+      operationId: getOpening
+      summary: Get Opening
+      description: Returns a single job opening by ID.
+      tags:
+        - Openings
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The unique identifier of the opening.
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: A single opening.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Opening'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /candidates:
+    get:
+      operationId: listCandidates
+      summary: List Candidates
+      description: Returns a paginated list of candidates, optionally filtered by opening.
+      tags:
+        - Candidates
+      parameters:
+        - name: opening
+          in: query
+          description: Filter candidates by opening ID.
+          required: false
+          schema:
+            type: integer
+        - name: limit
+          in: query
+          description: Number of results per page.
+          required: false
+          schema:
+            type: integer
+            default: 10
+            maximum: 100
+        - name: offset
+          in: query
+          description: Number of results to skip for pagination.
+          required: false
+          schema:
+            type: integer
+            default: 0
+      responses:
+        '200':
+          description: A list of candidates.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    type: integer
+                  next:
+                    type: string
+                    nullable: true
+                  previous:
+                    type: string
+                    nullable: true
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Candidate'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    post:
+      operationId: createCandidate
+      summary: Create Candidate
+      description: Creates a new candidate record.
+      tags:
+        - Candidates
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CandidateInput'
+      responses:
+        '201':
+          description: Candidate created successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Candidate'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /candidates/{id}:
+    get:
+      operationId: getCandidate
+      summary: Get Candidate
+      description: Returns a single candidate by ID.
+      tags:
+        - Candidates
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The unique identifier of the candidate.
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: A single candidate.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Candidate'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    patch:
+      operationId: updateCandidate
+      summary: Update Candidate
+      description: Partially updates a candidate record.
+      tags:
+        - Candidates
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The unique identifier of the candidate.
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CandidateInput'
+      responses:
+        '200':
+          description: Candidate updated successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Candidate'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    delete:
+      operationId: deleteCandidate
+      summary: Delete Candidate
+      description: Deletes a candidate record.
+      tags:
+        - Candidates
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The unique identifier of the candidate.
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Candidate deleted successfully.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /candidatemessages:
+    get:
+      operationId: listCandidateMessages
+      summary: List Candidate Messages
+      description: Returns a list of messages sent to candidates.
+      tags:
+        - Candidate Messages
+      parameters:
+        - name: candidate
+          in: query
+          description: Filter messages by candidate ID.
+          required: false
+          schema:
+            type: integer
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 10
+        - name: offset
+          in: query
+          schema:
+            type: integer
+            default: 0
+      responses:
+        '200':
+          description: A list of candidate messages.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    type: integer
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/CandidateMessage'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /candidatemessages/{id}:
+    get:
+      operationId: getCandidateMessage
+      summary: Get Candidate Message
+      description: Returns a single candidate message by ID.
+      tags:
+        - Candidate Messages
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: A single candidate message.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CandidateMessage'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /internalnotes:
+    get:
+      operationId: listInternalNotes
+      summary: List Internal Notes
+      description: Returns a list of internal notes, optionally filtered by candidate.
+      tags:
+        - Internal Notes
+      parameters:
+        - name: candidate
+          in: query
+          description: Filter notes by candidate ID.
+          required: false
+          schema:
+            type: integer
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 10
+        - name: offset
+          in: query
+          schema:
+            type: integer
+            default: 0
+      responses:
+        '200':
+          description: A list of internal notes.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    type: integer
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/InternalNote'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /internalnotes/{id}:
+    get:
+      operationId: getInternalNote
+      summary: Get Internal Note
+      description: Returns a single internal note by ID.
+      tags:
+        - Internal Notes
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: A single internal note.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalNote'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /interviews:
+    get:
+      operationId: listInterviews
+      summary: List Interviews
+      description: Returns a list of interviews, optionally filtered by candidate.
+      tags:
+        - Interviews
+      parameters:
+        - name: candidate
+          in: query
+          description: Filter interviews by candidate ID.
+          required: false
+          schema:
+            type: integer
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 10
+        - name: offset
+          in: query
+          schema:
+            type: integer
+            default: 0
+      responses:
+        '200':
+          description: A list of interviews.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    type: integer
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Interview'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /interviews/{id}:
+    get:
+      operationId: getInterview
+      summary: Get Interview
+      description: Returns details of a specific interview.
+      tags:
+        - Interviews
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: A single interview.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Interview'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /reviews:
+    get:
+      operationId: listReviews
+      summary: List Reviews
+      description: Returns a list of reviews, optionally filtered by candidate.
+      tags:
+        - Reviews
+      parameters:
+        - name: candidate
+          in: query
+          description: Filter reviews by candidate ID.
+          required: false
+          schema:
+            type: integer
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 10
+        - name: offset
+          in: query
+          schema:
+            type: integer
+            default: 0
+      responses:
+        '200':
+          description: A list of reviews.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    type: integer
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Review'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /reviews/{id}:
+    get:
+      operationId: getReview
+      summary: Get Review
+      description: Returns a single review by ID.
+      tags:
+        - Reviews
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: A single review.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Review'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /evaluations:
+    get:
+      operationId: listEvaluations
+      summary: List Evaluations
+      description: Returns a list of evaluations, optionally filtered by candidate.
+      tags:
+        - Evaluations
+      parameters:
+        - name: candidate
+          in: query
+          description: Filter evaluations by candidate ID.
+          required: false
+          schema:
+            type: integer
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 10
+        - name: offset
+          in: query
+          schema:
+            type: integer
+            default: 0
+      responses:
+        '200':
+          description: A list of evaluations.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    type: integer
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Evaluation'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /todos:
+    get:
+      operationId: listTodos
+      summary: List To-Dos
+      description: Returns a list of to-do items, optionally filtered by candidate.
+      tags:
+        - To-Dos
+      parameters:
+        - name: candidate
+          in: query
+          description: Filter to-dos by candidate ID.
+          required: false
+          schema:
+            type: integer
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 10
+        - name: offset
+          in: query
+          schema:
+            type: integer
+            default: 0
+      responses:
+        '200':
+          description: A list of to-do items.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    type: integer
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Todo'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /todos/{id}:
+    get:
+      operationId: getTodo
+      summary: Get To-Do
+      description: Returns a single to-do item by ID.
+      tags:
+        - To-Dos
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: A single to-do item.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Todo'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+components:
+  securitySchemes:
+    apiKey:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: >-
+        API key generated from the Trakstar Hire Super Admin settings page.
+        Pass as "ApiKey {your_api_key}".
+  schemas:
+    Opening:
+      type: object
+      description: A job opening / position in the Trakstar Hire system.
+      properties:
+        id:
+          type: integer
+          description: Unique identifier for the opening.
+          readOnly: true
+        title:
+          type: string
+          description: Title of the job opening.
+        status:
+          type: string
+          description: Current status of the opening.
+          enum:
+            - open
+            - closed
+            - draft
+        department:
+          type: string
+          description: Department associated with this opening.
+          nullable: true
+        location:
+          type: string
+          description: Job location.
+          nullable: true
+        description:
+          type: string
+          description: Full job description.
+          nullable: true
+        created_at:
+          type: string
+          format: date-time
+          description: Timestamp when the opening was created.
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          description: Timestamp when the opening was last updated.
+          readOnly: true
+    OpeningInput:
+      type: object
+      required:
+        - title
+      properties:
+        title:
+          type: string
+          description: Title of the job opening.
+        status:
+          type: string
+          description: Status of the opening.
+          enum:
+            - open
+            - closed
+            - draft
+          default: draft
+        department:
+          type: string
+          description: Department associated with this opening.
+          nullable: true
+        location:
+          type: string
+          description: Job location.
+          nullable: true
+        description:
+          type: string
+          description: Full job description.
+          nullable: true
+    Candidate:
+      type: object
+      description: A candidate applying to a job opening.
+      properties:
+        id:
+          type: integer
+          description: Unique identifier for the candidate.
+          readOnly: true
+        first_name:
+          type: string
+          description: Candidate's first name.
+        last_name:
+          type: string
+          description: Candidate's last name.
+        email:
+          type: string
+          format: email
+          description: Candidate's email address.
+        phone:
+          type: string
+          description: Candidate's phone number.
+          nullable: true
+        opening:
+          type: integer
+          description: ID of the opening the candidate is applying to.
+        stage:
+          type: string
+          description: Current stage of the candidate in the hiring pipeline.
+          nullable: true
+        source:
+          type: string
+          description: Source of the candidate application.
+          nullable: true
+        created_at:
+          type: string
+          format: date-time
+          description: Timestamp when the candidate record was created.
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          description: Timestamp when the candidate record was last updated.
+          readOnly: true
+    CandidateInput:
+      type: object
+      required:
+        - first_name
+        - last_name
+        - opening
+      properties:
+        first_name:
+          type: string
+          description: Candidate's first name.
+        last_name:
+          type: string
+          description: Candidate's last name.
+        email:
+          type: string
+          format: email
+          description: Candidate's email address.
+        phone:
+          type: string
+          description: Candidate's phone number.
+          nullable: true
+        opening:
+          type: integer
+          description: ID of the opening the candidate is applying to.
+        source:
+          type: string
+          description: Source of the candidate application.
+          nullable: true
+    CandidateMessage:
+      type: object
+      description: A message sent to a candidate.
+      properties:
+        id:
+          type: integer
+          description: Unique identifier for the message.
+          readOnly: true
+        candidate:
+          type: integer
+          description: ID of the candidate the message was sent to.
+        subject:
+          type: string
+          description: Subject of the message.
+        body:
+          type: string
+          description: Body of the message.
+        sent_at:
+          type: string
+          format: date-time
+          description: Timestamp when the message was sent.
+          readOnly: true
+    InternalNote:
+      type: object
+      description: An internal note about a candidate.
+      properties:
+        id:
+          type: integer
+          description: Unique identifier for the note.
+          readOnly: true
+        candidate:
+          type: integer
+          description: ID of the candidate this note is about.
+        body:
+          type: string
+          description: Content of the note.
+        created_at:
+          type: string
+          format: date-time
+          description: Timestamp when the note was created.
+          readOnly: true
+    Interview:
+      type: object
+      description: An interview scheduled with a candidate.
+      properties:
+        id:
+          type: integer
+          description: Unique identifier for the interview.
+          readOnly: true
+        candidate:
+          type: integer
+          description: ID of the candidate being interviewed.
+        scheduled_at:
+          type: string
+          format: date-time
+          description: Scheduled date and time of the interview.
+          nullable: true
+        interviewer:
+          type: string
+          description: Name or identifier of the interviewer.
+          nullable: true
+        notes:
+          type: string
+          description: Notes about the interview.
+          nullable: true
+        created_at:
+          type: string
+          format: date-time
+          description: Timestamp when the interview was created.
+          readOnly: true
+    Review:
+      type: object
+      description: A review of a candidate.
+      properties:
+        id:
+          type: integer
+          description: Unique identifier for the review.
+          readOnly: true
+        candidate:
+          type: integer
+          description: ID of the candidate being reviewed.
+        rating:
+          type: string
+          description: Overall rating from the review.
+          nullable: true
+        comments:
+          type: string
+          description: Review comments.
+          nullable: true
+        reviewer:
+          type: string
+          description: Name or identifier of the reviewer.
+          nullable: true
+        created_at:
+          type: string
+          format: date-time
+          description: Timestamp when the review was created.
+          readOnly: true
+    Evaluation:
+      type: object
+      description: An evaluation of a candidate's qualifications.
+      properties:
+        id:
+          type: integer
+          description: Unique identifier for the evaluation.
+          readOnly: true
+        candidate:
+          type: integer
+          description: ID of the candidate being evaluated.
+        result:
+          type: string
+          description: Result or score of the evaluation.
+          nullable: true
+        notes:
+          type: string
+          description: Notes from the evaluation.
+          nullable: true
+        created_at:
+          type: string
+          format: date-time
+          description: Timestamp when the evaluation was created.
+          readOnly: true
+    Todo:
+      type: object
+      description: A to-do item related to a candidate.
+      properties:
+        id:
+          type: integer
+          description: Unique identifier for the to-do.
+          readOnly: true
+        candidate:
+          type: integer
+          description: ID of the candidate this to-do is associated with.
+        title:
+          type: string
+          description: Title of the to-do item.
+        due_date:
+          type: string
+          format: date
+          description: Due date of the to-do item.
+          nullable: true
+        completed:
+          type: boolean
+          description: Whether the to-do has been completed.
+          default: false
+        created_at:
+          type: string
+          format: date-time
+          description: Timestamp when the to-do was created.
+          readOnly: true
+    Error:
+      type: object
+      properties:
+        detail:
+          type: string
+          description: Human-readable error message.
+  responses:
+    Unauthorized:
+      description: Authentication credentials were not provided or are invalid.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    BadRequest:
+      description: The request was invalid or cannot be otherwise served.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: The requested resource could not be found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'

@@ -1,0 +1,10 @@
+{
+  "id": 42,
+  "title": "Senior Software Engineer",
+  "status": "open",
+  "department": "Engineering",
+  "location": "Austin, TX (Hybrid)",
+  "description": "We are looking for a Senior Software Engineer to join our growing Engineering team. You will design, develop, and maintain scalable backend services and APIs. Requires 5+ years of experience with Python or Node.js and familiarity with cloud infrastructure.",
+  "created_at": "2024-03-01T09:00:00Z",
+  "updated_at": "2024-05-15T14:30:00Z"
+}

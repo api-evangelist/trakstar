@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/trakstar/main/json-schema/trakstar-group.json",
+  "title": "Trakstar Learn Group",
+  "description": "A user group in the Trakstar Learn learning management system.",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "integer",
+      "format": "int64",
+      "description": "Unique Mindflash group identifier.",
+      "readOnly": true
+    },
+    "name": {
+      "type": "string",
+      "description": "Name of the group."
+    },
+    "userCount": {
+      "type": "integer",
+      "description": "Number of users in the group.",
+      "readOnly": true
+    },
+    "users": {
+      "type": "array",
+      "description": "Users belonging to this group (only present in detail responses).",
+      "items": {
+        "$ref": "trakstar-user.json"
+      }
+    }
+  },
+  "required": ["name"],
+  "additionalProperties": false
+}

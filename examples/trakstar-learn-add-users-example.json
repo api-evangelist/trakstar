@@ -1,0 +1,24 @@
+{
+  "users": [
+    {
+      "firstName": "John",
+      "lastName": "Doe",
+      "email": "jdoe@yourorg.com",
+      "username": "jdoe",
+      "permissions": 169000100,
+      "customfield0": "Sales"
+    },
+    {
+      "firstName": "Alice",
+      "lastName": "Jones",
+      "email": "ajones@yourorg.com",
+      "username": "ajones",
+      "permissions": 169000200
+    }
+  ],
+  "requiredCourseIds": [1662438386],
+  "courseIds": [],
+  "groupIds": [1662730984],
+  "clientDatestamp": "2024-06-13",
+  "batchId": 1
+}
