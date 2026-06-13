@@ -1,0 +1,74 @@
+specificationVersion: '1.0'
+id: trakstar-finops
+name: Trakstar FinOps
+description: >-
+  Trakstar operates a quote-based, per-user SaaS pricing model across its
+  Hire, Learn, Perform, and Insights products. All products are billed
+  annually by custom quote; no self-serve credit card sign-up is available.
+  API access is bundled within Hire and Learn subscriptions at no additional
+  cost. FinOps practitioners should track seat counts, active users per
+  module, and integration utilization to optimize spend on Trakstar
+  contracts.
+url: https://www.trakstar.com/pricing/
+framework: FinOps Framework 1.0
+alignment: FOCUS
+currency: USD
+billingModels:
+  - name: Per-User Annual Contract
+    description: >-
+      Trakstar pricing is quote-based and structured as an annual contract
+      with per-user or per-seat pricing. Third-party sources estimate
+      starting prices in the $4–$7 per user per month range depending on
+      product and company size, billed annually.
+    unit: user/month (billed annually)
+    estimatedRange:
+      low: 4.00
+      high: 7.00
+      currency: USD
+      basis: per user per month, estimated from third-party sources
+    notes: Contact Trakstar for an official quote at trakstar.com/pricing/
+
+costOptimization:
+  - practice: Right-size seat licenses
+    description: >-
+      Audit active vs. licensed users quarterly across Hire, Learn, and
+      Perform modules. Remove inactive or departed employee seats to reduce
+      per-user costs at contract renewal.
+  - practice: Bundle module negotiation
+    description: >-
+      Trakstar offers multi-product bundles (Hire + Learn + Perform +
+      Insights). Consolidating modules under a single contract may yield
+      better per-user pricing vs. purchasing products individually.
+  - practice: API usage auditing
+    description: >-
+      API access is included in Hire and Learn subscriptions. Audit API
+      key usage and integrations to ensure only active integrations consume
+      resources, avoiding unnecessary support overhead.
+  - practice: Annual vs. multi-year terms
+    description: >-
+      Trakstar may offer discounts for multi-year contract commitments.
+      Evaluate stability of headcount and product needs before committing
+      to extended terms.
+
+costAllocation:
+  dimensions:
+    - name: Product Module
+      values:
+        - Hire
+        - Learn
+        - Perform
+        - Insights
+    - name: Department
+      description: Allocate seats to HR, Recruiting, L&D, and business units.
+    - name: Active vs. Inactive Users
+      description: >-
+        Track seat utilization by comparing licensed users to monthly
+        active users per module.
+
+compliance:
+  - standard: SOC 2
+    status: certified
+  - standard: GDPR
+    status: compliant
+  - standard: CCPA
+    status: compliant

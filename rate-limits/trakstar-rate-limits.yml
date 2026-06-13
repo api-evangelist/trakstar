@@ -1,0 +1,32 @@
+specificationVersion: '0.1'
+id: trakstar-rate-limits
+name: Trakstar Rate Limits
+description: >-
+  Trakstar does not publicly document specific rate limits for its Hire or
+  Learn APIs. Both APIs use API key authentication and are described as
+  fully self-service. Developers should contact Trakstar support for
+  account-specific rate limit information. Standard best practices such as
+  exponential backoff and pagination should be employed to avoid throttling.
+url: https://support.hire.trakstar.com/article/1617-accessing-the-hire-api
+rateLimits:
+  - name: Trakstar Hire API Rate Limit
+    description: >-
+      Specific rate limit thresholds for the Trakstar Hire API (v2) are not
+      publicly disclosed. API access requires Super Admin-generated API keys.
+      Developers are advised to implement standard backoff strategies.
+      Technical documentation is available at developers.recruiterbox.com.
+    scope: account
+    disclosed: false
+    notes: Contact Trakstar Hire support for account-specific limits.
+    contact: https://support.hire.trakstar.com/
+
+  - name: Trakstar Learn API Rate Limit
+    description: >-
+      Specific rate limit thresholds for the Trakstar Learn API are not
+      publicly disclosed. API keys are provisioned by the support team on
+      request. Developers should email learn@trakstar.com for access and
+      for limit details.
+    scope: account
+    disclosed: false
+    notes: Contact learn@trakstar.com to request an API key and limit details.
+    contact: learn@trakstar.com

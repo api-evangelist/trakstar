@@ -1,0 +1,86 @@
+specificationVersion: '0.1'
+id: trakstar-plans-pricing
+name: Trakstar Plans and Pricing
+description: >-
+  Trakstar uses a quote-based pricing model across its product suite (Hire,
+  Learn, Perform, Insights). Pricing is customized based on company size,
+  number of users, and selected modules. No public tier pricing is listed;
+  prospective customers request a personalized quote. All plans include
+  implementation support, unlimited storage, and reporting. API access is
+  available within the Hire and Learn products for qualified accounts.
+url: https://www.trakstar.com/pricing/
+plans:
+  - name: Trakstar Perform — Quote-Based
+    description: >-
+      Performance management plan covering performance reviews, 360-degree
+      feedback, goal tracking, and engagement surveys. Pricing is customized;
+      estimated starting range reported by third parties at approximately
+      $4–$7 per user per month. Includes implementation support, unlimited
+      storage, and Trakstar Academy training.
+    url: https://www.trakstar.com/pricing/
+    pricingModel: quote-based
+    rateLimits: []
+    quotas: []
+    features:
+      - Performance reviews
+      - 360-degree feedback
+      - Goal alignment and tracking
+      - Engagement surveys
+      - Reporting and analytics
+      - Implementation and 1:1 support
+      - Trakstar Academy access
+      - Unlimited storage
+
+  - name: Trakstar Hire — Quote-Based
+    description: >-
+      Applicant tracking plan for managing job openings, candidates, interviews,
+      and evaluations. Includes REST API access via generated API keys for
+      Super Admins. Custom career site integration and ATS functionality for
+      teams of all sizes.
+    url: https://www.trakstar.com/pricing/
+    pricingModel: quote-based
+    apiAccess: true
+    rateLimits: []
+    quotas: []
+    features:
+      - Applicant tracking
+      - Job opening management
+      - Candidate pipeline management
+      - Interview scheduling
+      - Evaluations and reviews
+      - REST API access (v2)
+      - Custom career site support
+      - Reporting
+
+  - name: Trakstar Learn — Quote-Based
+    description: >-
+      Learning management plan for employee training, compliance, and
+      upskilling. Includes REST API access (key provisioned on request) for
+      user management, group assignments, course enrollment, and reporting.
+    url: https://www.trakstar.com/pricing/
+    pricingModel: quote-based
+    apiAccess: true
+    rateLimits: []
+    quotas: []
+    features:
+      - Course and module delivery
+      - Auto-enrollment
+      - User and group management
+      - Compliance tracking
+      - REST API access
+      - Reporting and analytics
+      - Unlimited content storage
+
+  - name: Trakstar Insights — Quote-Based
+    description: >-
+      Workforce analytics add-on providing data dashboards to monitor HR trends
+      and identify opportunities across Hire, Learn, and Perform data.
+    url: https://www.trakstar.com/pricing/
+    pricingModel: quote-based
+    rateLimits: []
+    quotas: []
+    features:
+      - Workforce analytics dashboard
+      - Cross-product data aggregation
+      - Trend monitoring
+      - Custom reporting

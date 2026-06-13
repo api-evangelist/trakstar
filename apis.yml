@@ -1,0 +1,110 @@
+aid: trakstar
+name: Trakstar
+description: >-
+  Trakstar is an HR performance and talent management platform serving over
+  3,000 companies with integrated tools for performance appraisals, goal
+  alignment, 360-degree feedback, and employee development tracking. The
+  platform comprises four core products — Hire (applicant tracking), Learn
+  (learning management), Perform (performance management), and Insights
+  (workforce analytics) — each exposing its own REST API. Trakstar Hire offers
+  a v2 REST API for managing openings, candidates, interviews, evaluations, and
+  reviews using API key authentication. Trakstar Learn provides a REST API for
+  user account management, group assignments, course enrollment, and reporting.
+  Acquired by Mitratech in April 2023, Trakstar is SOC 2, GDPR, and CCPA
+  compliant and supports seamless integrations with HRIS, SSO, and
+  communications applications.
+type: Index
+image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+url: https://raw.githubusercontent.com/api-evangelist/trakstar/refs/heads/main/apis.yml
+created: '2026-06-13'
+modified: '2026-06-13'
+specificationVersion: '0.19'
+tags:
+  - HR
+  - Human Resources
+  - Performance Management
+  - Talent Management
+  - Applicant Tracking
+  - Learning Management
+  - 360 Feedback
+  - Goal Management
+  - Employee Development
+  - Performance Appraisal
+apis:
+  - aid: trakstar:trakstar-hire-api
+    name: Trakstar Hire API
+    description: >-
+      The Trakstar Hire REST API enables developers to manage openings,
+      candidates, candidate messages, internal notes, interviews, reviews,
+      evaluations, and to-dos programmatically. It returns JSON responses and
+      uses API key authentication generated from the account's Super Admin
+      settings. The most common use cases include building custom career sites
+      and syncing opening or candidate data with external systems.
+    image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+    humanURL: https://developers.recruiterbox.com/reference/introduction
+    baseURL: https://companyname.hire.trakstar.com/api/v1/
+    tags:
+      - Hiring
+      - Applicant Tracking
+      - Recruiting
+      - Candidates
+      - Job Openings
+    properties:
+      - type: Documentation
+        url: https://developers.recruiterbox.com/reference/introduction
+      - type: OpenAPI
+        url: https://developers.recruiterbox.com/llms.txt
+    contact:
+      - FN: Trakstar Hire Support
+        url: https://support.hire.trakstar.com/article/1617-accessing-the-hire-api
+
+  - aid: trakstar:trakstar-learn-api
+    name: Trakstar Learn API
+    description: >-
+      The Trakstar Learn REST API allows developers to manage user accounts,
+      group assignments, course and module enrollments, user status, and
+      reporting programmatically. API keys are provisioned by the Trakstar Learn
+      support team upon request. The API supports pagination and filtering and
+      is fully self-service with implementation responsibility on the developer.
+    image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+    humanURL: https://support.learn.trakstar.com/article/815-workflow-api-documentation
+    baseURL: https://api.learn.trakstar.com/
+    tags:
+      - Learning Management
+      - Training
+      - Course Enrollment
+      - User Management
+      - LMS
+    properties:
+      - type: Documentation
+        url: https://support.learn.trakstar.com/article/815-workflow-api-documentation
+    contact:
+      - FN: Trakstar Learn Support
+        email: learn@trakstar.com
+
+common:
+  - type: Website
+    url: https://www.trakstar.com/
+  - type: Documentation
+    url: https://developers.recruiterbox.com/reference/introduction
+  - type: GitHubOrg
+    url: https://github.com/promantek
+  - type: LinkedIn
+    url: https://www.linkedin.com/company/trakstar
+  - type: Blog
+    url: https://www.trakstar.com/blog/
+  - type: Pricing
+    url: https://www.trakstar.com/pricing/
+  - type: StatusPage
+    url: https://status.hire.trakstar.com/
+  - type: X
+    url: https://x.com/trakstar_hr
+  - type: Plans
+    url: plans/trakstar-plans-pricing.yml
+  - type: RateLimits
+    url: rate-limits/trakstar-rate-limits.yml
+  - type: FinOps
+    url: finops/trakstar-finops.yml
+maintainers:
+  - FN: Kin Lane
+    email: kin@apievangelist.com
