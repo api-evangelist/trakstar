@@ -14,7 +14,7 @@ description: >-
   compliant and supports seamless integrations with HRIS, SSO, and
   communications applications.
 type: Index
-image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
 url: https://raw.githubusercontent.com/api-evangelist/trakstar/refs/heads/main/apis.yml
 created: '2026-06-13'
 modified: '2026-06-13'
@@ -40,7 +40,7 @@ apis:
       uses API key authentication generated from the account's Super Admin
       settings. The most common use cases include building custom career sites
       and syncing opening or candidate data with external systems.
-    image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+    image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
     humanURL: https://developers.recruiterbox.com/reference/introduction
     baseURL: https://companyname.hire.trakstar.com/api/v1/
     tags:
@@ -66,7 +66,7 @@ apis:
       reporting programmatically. API keys are provisioned by the Trakstar Learn
       support team upon request. The API supports pagination and filtering and
       is fully self-service with implementation responsibility on the developer.
-    image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+    image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
     humanURL: https://support.learn.trakstar.com/article/815-workflow-api-documentation
     baseURL: https://api.learn.trakstar.com/
     tags:
