@@ -85,6 +85,12 @@ apis:
         email: learn@trakstar.com
 
 common:
+  - type: TrustCenter
+    url: security/trakstar-trust-center.yml
+  - type: DomainSecurity
+    url: security/trakstar-domain-security.yml
+  - type: Authentication
+    url: authentication/trakstar-authentication.yml
   - type: Website
     url: https://www.trakstar.com/
   - type: Documentation

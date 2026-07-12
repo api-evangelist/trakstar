@@ -1,0 +1,25 @@
+generated: '2026-07-11'
+method: derived
+source: openapi/trakstar-hire-api-openapi.yml, openapi/trakstar-learn-api-openapi.yml
+summary:
+  types:
+  - apiKey
+  api_key_in:
+  - header
+schemes:
+- name: apiKey
+  type: apiKey
+  in: header
+  parameter: Authorization
+  description: API key generated from the Trakstar Hire Super Admin settings page. Pass as "ApiKey
+    {your_api_key}".
+  sources:
+  - openapi/trakstar-hire-api-openapi.yml
+- name: apiKey
+  type: apiKey
+  in: header
+  parameter: x-mindflash-apikey
+  description: API key provisioned by Trakstar Learn support team. Contact learn@trakstar.com
+    to request access.
+  sources:
+  - openapi/trakstar-learn-api-openapi.yml
