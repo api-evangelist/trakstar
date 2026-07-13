@@ -2,13 +2,14 @@
   "repo": "trakstar",
   "feeds": [
     {
-      "source": "https://www.trakstar.com/blog/",
-      "feed_url": "",
+      "source": "https://www.linkedin.com/company/trakstar",
+      "feed_url": "https://www.linkedin.com/company/trakstar",
+      "title": "",
       "saved": 0,
-      "method": "agent-scrape"
+      "method": "none"
     }
   ],
   "post_count": 25,
-  "fetched": "2026-06-27T13:16:26Z",
+  "fetched": "2026-07-11T11:50:51Z",
   "agent_pulled": "2026-06-27"
 }
