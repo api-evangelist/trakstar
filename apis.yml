@@ -85,6 +85,8 @@ apis:
         email: learn@trakstar.com
 
 common:
+  - type: AgenticAccess
+    url: agentic-access/trakstar-agentic-access.yml
   - type: TrustCenter
     url: security/trakstar-trust-center.yml
   - type: DomainSecurity
