@@ -1,0 +1,111 @@
+openapi: 3.0.3
+info:
+  title: Trakstar Hire Auth Evaluations API
+  description: The Trakstar Hire REST API (formerly Recruiterbox) enables developers to manage openings, candidates, candidate messages, internal notes, interviews, reviews, evaluations, and to-dos programmatically. It returns JSON responses and uses API key authentication generated from the account's Super Admin settings. The most common use cases include building custom career sites and syncing opening or candidate data with external systems.
+  version: '2'
+  contact:
+    name: Trakstar Hire Support
+    url: https://support.hire.trakstar.com/article/1617-accessing-the-hire-api
+  license:
+    name: Proprietary
+servers:
+- url: https://{companyName}.hire.trakstar.com/api/v2
+  description: Trakstar Hire API v2
+  variables:
+    companyName:
+      description: Your company subdomain name
+      default: yourcompany
+security:
+- apiKey: []
+tags:
+- name: Evaluations
+  description: Manage candidate evaluations
+paths:
+  /evaluations:
+    get:
+      operationId: listEvaluations
+      summary: List Evaluations
+      description: Returns a list of evaluations, optionally filtered by candidate.
+      tags:
+      - Evaluations
+      parameters:
+      - name: candidate
+        in: query
+        description: Filter evaluations by candidate ID.
+        required: false
+        schema:
+          type: integer
+      - name: limit
+        in: query
+        schema:
+          type: integer
+          default: 10
+      - name: offset
+        in: query
+        schema:
+          type: integer
+          default: 0
+      responses:
+        '200':
+          description: A list of evaluations.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    type: integer
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Evaluation'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+components:
+  schemas:
+    Error:
+      type: object
+      properties:
+        detail:
+          type: string
+          description: Human-readable error message.
+    Evaluation:
+      type: object
+      description: An evaluation of a candidate's qualifications.
+      properties:
+        id:
+          type: integer
+          description: Unique identifier for the evaluation.
+          readOnly: true
+        candidate:
+          type: integer
+          description: ID of the candidate being evaluated.
+        result:
+          type: string
+          description: Result or score of the evaluation.
+          nullable: true
+        notes:
+          type: string
+          description: Notes from the evaluation.
+          nullable: true
+        created_at:
+          type: string
+          format: date-time
+          description: Timestamp when the evaluation was created.
+          readOnly: true
+  responses:
+    Unauthorized:
+      description: Authentication credentials were not provided or are invalid.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  securitySchemes:
+    apiKey:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: API key generated from the Trakstar Hire Super Admin settings page. Pass as "ApiKey {your_api_key}".
+externalDocs:
+  description: Trakstar Hire API Reference
+  url: https://developers.recruiterbox.com/reference/introduction

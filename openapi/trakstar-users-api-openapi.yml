@@ -1,0 +1,537 @@
+openapi: 3.0.3
+info:
+  title: Trakstar Hire Auth Users API
+  description: The Trakstar Hire REST API (formerly Recruiterbox) enables developers to manage openings, candidates, candidate messages, internal notes, interviews, reviews, evaluations, and to-dos programmatically. It returns JSON responses and uses API key authentication generated from the account's Super Admin settings. The most common use cases include building custom career sites and syncing opening or candidate data with external systems.
+  version: '2'
+  contact:
+    name: Trakstar Hire Support
+    url: https://support.hire.trakstar.com/article/1617-accessing-the-hire-api
+  license:
+    name: Proprietary
+servers:
+- url: https://{companyName}.hire.trakstar.com/api/v2
+  description: Trakstar Hire API v2
+  variables:
+    companyName:
+      description: Your company subdomain name
+      default: yourcompany
+security:
+- apiKey: []
+tags:
+- name: Users
+  description: Manage user accounts
+paths:
+  /user:
+    get:
+      operationId: listUsers
+      summary: List Users
+      description: Returns a list of all users in the organization. Supports filtering by status, type, custom fields, and date ranges.
+      tags:
+      - Users
+      parameters:
+      - name: _status
+        in: query
+        description: Filter by user status.
+        required: false
+        schema:
+          type: string
+          enum:
+          - Active
+          - Archived
+          - All
+          default: All
+      - name: _type
+        in: query
+        description: Filter by user type.
+        required: false
+        schema:
+          type: string
+          enum:
+          - Trainee
+          - Trainer
+          - Manager
+          - Administrator
+          - All
+          default: All
+      - name: _createdAfter
+        in: query
+        description: Filter by date user was created (on or after). Must be in ISO 8601 format (e.g. 2017-01-21 or 2017-01-21T09:30:00Z).
+        required: false
+        schema:
+          type: string
+          format: date-time
+      - name: _modifiedAfter
+        in: query
+        description: Filter by date user was modified (on or after). Must be in ISO 8601 format.
+        required: false
+        schema:
+          type: string
+          format: date-time
+      responses:
+        '200':
+          description: A list of users.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+    post:
+      operationId: addUsers
+      summary: Add Users
+      description: Adds one or more users to the Trakstar Learn system. A maximum of 200 users may be added per API call. Optionally enrolls users in courses and places them in groups.
+      tags:
+      - Users
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddUsersRequest'
+            example:
+              users:
+              - firstName: John
+                lastName: Doe
+                email: jdoe@example.com
+                username: jdoe
+                permissions: 169000100
+              courseIds: []
+              groupIds: []
+              clientDatestamp: '2024-01-15'
+      responses:
+        '200':
+          description: Users added successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AddUsersResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+  /user/{userId}:
+    get:
+      operationId: getUser
+      summary: Get User
+      description: Returns detailed information for a specific user by their Mindflash user ID, including group membership and course enrollment information.
+      tags:
+      - Users
+      parameters:
+      - name: userId
+        in: path
+        required: true
+        description: The Mindflash ID of the user.
+        schema:
+          type: integer
+          format: int64
+      responses:
+        '200':
+          description: A single user with detailed information.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserDetail'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+    post:
+      operationId: editUser
+      summary: Edit User
+      description: Updates user information for a specific user.
+      tags:
+      - Users
+      parameters:
+      - name: userId
+        in: path
+        required: true
+        description: The Mindflash ID of the user to update.
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EditUserRequest'
+      responses:
+        '200':
+          description: User updated successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+  /user/{userId}/archive:
+    post:
+      operationId: archiveUser
+      summary: Archive User
+      description: Archives a user. Archived users will be unable to take courses or log in to the Trakstar Learn site.
+      tags:
+      - Users
+      parameters:
+      - name: userId
+        in: path
+        required: true
+        description: The Mindflash ID of the user to archive.
+        schema:
+          type: integer
+          format: int64
+      responses:
+        '200':
+          description: User archived successfully.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+components:
+  responses:
+    Unauthorized:
+      description: Authentication credentials were not provided or are invalid.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    TooManyRequests:
+      description: Rate limit exceeded. The API enforces a limit of 10 requests per 10 seconds per API key.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: The requested resource could not be found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    BadRequest:
+      description: The request was invalid or cannot be otherwise served.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  schemas:
+    CourseEnrollment:
+      type: object
+      description: A course enrollment for a user.
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: Course ID.
+        name:
+          type: string
+          description: Course name.
+        status:
+          type: string
+          description: Enrollment/completion status.
+        required:
+          type: boolean
+          description: Whether the course is required for this user.
+        enrolledAt:
+          type: string
+          format: date-time
+          description: When the user was enrolled.
+          nullable: true
+        completedAt:
+          type: string
+          format: date-time
+          description: When the user completed the course.
+          nullable: true
+    NewUser:
+      type: object
+      required:
+      - firstName
+      - lastName
+      description: User data for creating a new account. At least one of email or username must be provided.
+      properties:
+        firstName:
+          type: string
+          maxLength: 35
+          description: User's first name.
+        lastName:
+          type: string
+          maxLength: 35
+          description: User's last name.
+        email:
+          type: string
+          format: email
+          maxLength: 254
+          description: User's email address. At least one of email or username is required.
+        username:
+          type: string
+          maxLength: 254
+          description: Unique username. At least one of email or username is required.
+        permissions:
+          type: integer
+          description: User role permission code. Default is Trainee (169000100).
+          enum:
+          - 169000100
+          - 169000200
+          - 169000300
+          - 169000400
+          - 169000500
+          - 169000600
+          default: 169000100
+        password:
+          type: string
+          maxLength: 35
+          description: Login password. Allows user to login via the Trakstar Learn website.
+        yammerId:
+          type: string
+          description: Yammer ID of the user.
+        customfield0:
+          type: string
+          description: Custom field 0.
+        customfield1:
+          type: string
+          description: Custom field 1.
+        customfield2:
+          type: string
+          description: Custom field 2.
+        customfield3:
+          type: string
+          description: Custom field 3.
+        customfield4:
+          type: string
+          description: Custom field 4.
+        customfield5:
+          type: string
+          description: Custom field 5.
+        customfield6:
+          type: string
+          description: Custom field 6.
+        customfield7:
+          type: string
+          description: Custom field 7.
+        customfield8:
+          type: string
+          description: Custom field 8.
+        customfield9:
+          type: string
+          description: Custom field 9.
+    Error:
+      type: object
+      properties:
+        message:
+          type: string
+          description: Human-readable error message.
+        errors:
+          type: array
+          items:
+            type: string
+    GroupSummary:
+      type: object
+      description: Summary of a group (used within user objects).
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+    EditUserRequest:
+      type: object
+      description: Fields to update on an existing user account.
+      properties:
+        firstName:
+          type: string
+          maxLength: 35
+        lastName:
+          type: string
+          maxLength: 35
+        email:
+          type: string
+          format: email
+          maxLength: 254
+        username:
+          type: string
+          maxLength: 254
+        permissions:
+          type: integer
+          enum:
+          - 169000100
+          - 169000200
+          - 169000300
+          - 169000400
+          - 169000500
+          - 169000600
+        customfield0:
+          type: string
+        customfield1:
+          type: string
+        customfield2:
+          type: string
+        customfield3:
+          type: string
+        customfield4:
+          type: string
+        customfield5:
+          type: string
+        customfield6:
+          type: string
+        customfield7:
+          type: string
+        customfield8:
+          type: string
+        customfield9:
+          type: string
+    UserDetail:
+      allOf:
+      - $ref: '#/components/schemas/User'
+      - type: object
+        description: Extended user information including courses.
+        properties:
+          courses:
+            type: array
+            description: Courses the user is enrolled in.
+            items:
+              $ref: '#/components/schemas/CourseEnrollment'
+    AddUsersResponse:
+      type: object
+      description: Response from adding users.
+      properties:
+        batchId:
+          type: integer
+          description: The batchId provided in the request.
+        usersAdded:
+          type: integer
+          description: Number of users successfully added.
+        errors:
+          type: array
+          description: Any errors encountered during the operation.
+          items:
+            type: object
+            properties:
+              email:
+                type: string
+              error:
+                type: string
+    User:
+      type: object
+      description: A user account in Trakstar Learn.
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: Unique Mindflash user identifier.
+          readOnly: true
+        name:
+          type: string
+          description: Full display name (Last, First format).
+          readOnly: true
+        firstName:
+          type: string
+          description: User's first name.
+        lastName:
+          type: string
+          description: User's last name.
+        username:
+          type: string
+          description: Unique username for login.
+        email:
+          type: string
+          format: email
+          description: User's email address.
+        status:
+          type: string
+          description: User's account status.
+          enum:
+          - Active
+          - Archived
+        type:
+          type: string
+          description: User's role/type in the system.
+          enum:
+          - Trainee
+          - Trainer
+          - Manager
+          - Administrator
+          - Reporter
+          - Team Lead
+        isOwner:
+          type: integer
+          description: Whether this user is the account owner (1) or not (0).
+          enum:
+          - 0
+          - 1
+        groups:
+          type: array
+          description: Groups the user belongs to.
+          items:
+            $ref: '#/components/schemas/GroupSummary'
+      example:
+        id: 333
+        name: Doe, John
+        firstName: John
+        lastName: Doe
+        username: jdoe
+        email: jdoe@yourorg.com
+        status: Active
+        type: Trainee
+        isOwner: 0
+        groups: []
+    AddUsersRequest:
+      type: object
+      required:
+      - users
+      - clientDatestamp
+      description: Request body for adding one or more users.
+      properties:
+        users:
+          type: array
+          maxItems: 200
+          description: List of users to add. Maximum 200 users per call.
+          items:
+            $ref: '#/components/schemas/NewUser'
+        requiredCourseIds:
+          type: array
+          description: Course IDs to enroll users in with required flag enabled.
+          items:
+            type: integer
+            format: int64
+        courseIds:
+          type: array
+          description: Course IDs to enroll users in with required flag disabled.
+          items:
+            type: integer
+            format: int64
+        groupIds:
+          type: array
+          description: Group IDs to place the users in.
+          items:
+            type: integer
+            format: int64
+        clientDatestamp:
+          type: string
+          format: date
+          description: The current date in YYYY-MM-DD format.
+        batchId:
+          type: integer
+          description: Unique sequential number to identify this API call; returned in the response.
+  securitySchemes:
+    apiKey:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: API key generated from the Trakstar Hire Super Admin settings page. Pass as "ApiKey {your_api_key}".
+externalDocs:
+  description: Trakstar Hire API Reference
+  url: https://developers.recruiterbox.com/reference/introduction

@@ -1,0 +1,233 @@
+openapi: 3.0.3
+info:
+  title: Trakstar Hire Auth Openings API
+  description: The Trakstar Hire REST API (formerly Recruiterbox) enables developers to manage openings, candidates, candidate messages, internal notes, interviews, reviews, evaluations, and to-dos programmatically. It returns JSON responses and uses API key authentication generated from the account's Super Admin settings. The most common use cases include building custom career sites and syncing opening or candidate data with external systems.
+  version: '2'
+  contact:
+    name: Trakstar Hire Support
+    url: https://support.hire.trakstar.com/article/1617-accessing-the-hire-api
+  license:
+    name: Proprietary
+servers:
+- url: https://{companyName}.hire.trakstar.com/api/v2
+  description: Trakstar Hire API v2
+  variables:
+    companyName:
+      description: Your company subdomain name
+      default: yourcompany
+security:
+- apiKey: []
+tags:
+- name: Openings
+  description: Manage job openings / positions
+paths:
+  /openings:
+    get:
+      operationId: listOpenings
+      summary: List Openings
+      description: Returns a paginated list of all job openings in the account.
+      tags:
+      - Openings
+      parameters:
+      - name: limit
+        in: query
+        description: Number of results per page.
+        required: false
+        schema:
+          type: integer
+          default: 10
+          maximum: 100
+      - name: offset
+        in: query
+        description: Number of results to skip for pagination.
+        required: false
+        schema:
+          type: integer
+          default: 0
+      - name: status
+        in: query
+        description: Filter openings by status.
+        required: false
+        schema:
+          type: string
+          enum:
+          - open
+          - closed
+          - draft
+      responses:
+        '200':
+          description: A list of openings.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    type: integer
+                    description: Total number of openings matching the query.
+                  next:
+                    type: string
+                    nullable: true
+                    description: URL for next page of results.
+                  previous:
+                    type: string
+                    nullable: true
+                    description: URL for previous page of results.
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Opening'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    post:
+      operationId: createOpening
+      summary: Create Opening
+      description: Creates a new job opening.
+      tags:
+      - Openings
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OpeningInput'
+      responses:
+        '201':
+          description: Opening created successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Opening'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /openings/{id}:
+    get:
+      operationId: getOpening
+      summary: Get Opening
+      description: Returns a single job opening by ID.
+      tags:
+      - Openings
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: The unique identifier of the opening.
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: A single opening.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Opening'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+components:
+  responses:
+    Unauthorized:
+      description: Authentication credentials were not provided or are invalid.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: The requested resource could not be found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    BadRequest:
+      description: The request was invalid or cannot be otherwise served.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  schemas:
+    Opening:
+      type: object
+      description: A job opening / position in the Trakstar Hire system.
+      properties:
+        id:
+          type: integer
+          description: Unique identifier for the opening.
+          readOnly: true
+        title:
+          type: string
+          description: Title of the job opening.
+        status:
+          type: string
+          description: Current status of the opening.
+          enum:
+          - open
+          - closed
+          - draft
+        department:
+          type: string
+          description: Department associated with this opening.
+          nullable: true
+        location:
+          type: string
+          description: Job location.
+          nullable: true
+        description:
+          type: string
+          description: Full job description.
+          nullable: true
+        created_at:
+          type: string
+          format: date-time
+          description: Timestamp when the opening was created.
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          description: Timestamp when the opening was last updated.
+          readOnly: true
+    Error:
+      type: object
+      properties:
+        detail:
+          type: string
+          description: Human-readable error message.
+    OpeningInput:
+      type: object
+      required:
+      - title
+      properties:
+        title:
+          type: string
+          description: Title of the job opening.
+        status:
+          type: string
+          description: Status of the opening.
+          enum:
+          - open
+          - closed
+          - draft
+          default: draft
+        department:
+          type: string
+          description: Department associated with this opening.
+          nullable: true
+        location:
+          type: string
+          description: Job location.
+          nullable: true
+        description:
+          type: string
+          description: Full job description.
+          nullable: true
+  securitySchemes:
+    apiKey:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: API key generated from the Trakstar Hire Super Admin settings page. Pass as "ApiKey {your_api_key}".
+externalDocs:
+  description: Trakstar Hire API Reference
+  url: https://developers.recruiterbox.com/reference/introduction

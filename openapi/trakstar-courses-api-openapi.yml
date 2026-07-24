@@ -1,0 +1,281 @@
+openapi: 3.0.3
+info:
+  title: Trakstar Hire Auth Courses API
+  description: The Trakstar Hire REST API (formerly Recruiterbox) enables developers to manage openings, candidates, candidate messages, internal notes, interviews, reviews, evaluations, and to-dos programmatically. It returns JSON responses and uses API key authentication generated from the account's Super Admin settings. The most common use cases include building custom career sites and syncing opening or candidate data with external systems.
+  version: '2'
+  contact:
+    name: Trakstar Hire Support
+    url: https://support.hire.trakstar.com/article/1617-accessing-the-hire-api
+  license:
+    name: Proprietary
+servers:
+- url: https://{companyName}.hire.trakstar.com/api/v2
+  description: Trakstar Hire API v2
+  variables:
+    companyName:
+      description: Your company subdomain name
+      default: yourcompany
+security:
+- apiKey: []
+tags:
+- name: Courses
+  description: Manage course enrollment and information
+paths:
+  /course:
+    get:
+      operationId: listCourses
+      summary: List Courses
+      description: Returns a list of all courses in the organization.
+      tags:
+      - Courses
+      parameters:
+      - name: status
+        in: query
+        description: Filter results by course status.
+        required: false
+        schema:
+          type: string
+          enum:
+          - Active
+          - Archive
+          - All
+          default: All
+      responses:
+        '200':
+          description: A list of courses.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Course'
+              example:
+              - id: 1662438386
+                name: Course A
+                description: Introduction to safety procedures
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+  /course/{courseId}:
+    get:
+      operationId: getCourse
+      summary: Get Course
+      description: Returns detailed information for a specific course.
+      tags:
+      - Courses
+      parameters:
+      - name: courseId
+        in: path
+        required: true
+        description: The Mindflash ID of the course.
+        schema:
+          type: integer
+          format: int64
+      - name: status
+        in: query
+        description: Filter results by course status.
+        required: false
+        schema:
+          type: string
+          enum:
+          - Active
+          - Archive
+          - All
+      responses:
+        '200':
+          description: A single course with detailed information.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CourseDetail'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+  /course/{courseId}/user/{userId}:
+    post:
+      operationId: inviteUserToCourse
+      summary: Invite User to Course
+      description: Invites a specific user to a specific course.
+      tags:
+      - Courses
+      parameters:
+      - name: courseId
+        in: path
+        required: true
+        description: The Mindflash ID of the course.
+        schema:
+          type: integer
+          format: int64
+      - name: userId
+        in: path
+        required: true
+        description: The Mindflash ID of the user.
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                clientDatestamp:
+                  type: string
+                  format: date
+                  description: The current date in YYYY-MM-DD format.
+                required:
+                  type: boolean
+                  description: Set true to make the course required for the user.
+                  default: false
+            example:
+              clientDatestamp: '2024-01-15'
+              required: false
+      responses:
+        '200':
+          description: User invited to course successfully.
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+  /course/{courseId}/user:
+    post:
+      operationId: inviteUsersToCourse
+      summary: Invite Multiple Users to Course
+      description: Invites multiple users to a specific course.
+      tags:
+      - Courses
+      parameters:
+      - name: courseId
+        in: path
+        required: true
+        description: The Mindflash ID of the course.
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                userIds:
+                  type: array
+                  items:
+                    type: integer
+                    format: int64
+                  description: List of Mindflash user IDs to invite.
+                clientDatestamp:
+                  type: string
+                  format: date
+                  description: The current date in YYYY-MM-DD format.
+                required:
+                  type: boolean
+                  description: Set true to make the course required for the users.
+                  default: false
+      responses:
+        '200':
+          description: Users invited to course successfully.
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+components:
+  responses:
+    Unauthorized:
+      description: Authentication credentials were not provided or are invalid.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    TooManyRequests:
+      description: Rate limit exceeded. The API enforces a limit of 10 requests per 10 seconds per API key.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: The requested resource could not be found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    BadRequest:
+      description: The request was invalid or cannot be otherwise served.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  schemas:
+    CourseDetail:
+      allOf:
+      - $ref: '#/components/schemas/Course'
+      - type: object
+        properties:
+          modules:
+            type: array
+            description: Modules within the course.
+            items:
+              type: object
+              properties:
+                id:
+                  type: integer
+                  format: int64
+                name:
+                  type: string
+                type:
+                  type: string
+    Error:
+      type: object
+      properties:
+        message:
+          type: string
+          description: Human-readable error message.
+        errors:
+          type: array
+          items:
+            type: string
+    Course:
+      type: object
+      description: A course in Trakstar Learn.
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: Unique Mindflash course identifier.
+          readOnly: true
+        name:
+          type: string
+          description: Name of the course.
+        description:
+          type: string
+          description: Course description.
+          nullable: true
+        status:
+          type: string
+          description: Course status.
+          enum:
+          - Active
+          - Archive
+  securitySchemes:
+    apiKey:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: API key generated from the Trakstar Hire Super Admin settings page. Pass as "ApiKey {your_api_key}".
+externalDocs:
+  description: Trakstar Hire API Reference
+  url: https://developers.recruiterbox.com/reference/introduction

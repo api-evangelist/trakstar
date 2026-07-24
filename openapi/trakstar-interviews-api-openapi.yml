@@ -1,0 +1,146 @@
+openapi: 3.0.3
+info:
+  title: Trakstar Hire Auth Interviews API
+  description: The Trakstar Hire REST API (formerly Recruiterbox) enables developers to manage openings, candidates, candidate messages, internal notes, interviews, reviews, evaluations, and to-dos programmatically. It returns JSON responses and uses API key authentication generated from the account's Super Admin settings. The most common use cases include building custom career sites and syncing opening or candidate data with external systems.
+  version: '2'
+  contact:
+    name: Trakstar Hire Support
+    url: https://support.hire.trakstar.com/article/1617-accessing-the-hire-api
+  license:
+    name: Proprietary
+servers:
+- url: https://{companyName}.hire.trakstar.com/api/v2
+  description: Trakstar Hire API v2
+  variables:
+    companyName:
+      description: Your company subdomain name
+      default: yourcompany
+security:
+- apiKey: []
+tags:
+- name: Interviews
+  description: Manage candidate interviews
+paths:
+  /interviews:
+    get:
+      operationId: listInterviews
+      summary: List Interviews
+      description: Returns a list of interviews, optionally filtered by candidate.
+      tags:
+      - Interviews
+      parameters:
+      - name: candidate
+        in: query
+        description: Filter interviews by candidate ID.
+        required: false
+        schema:
+          type: integer
+      - name: limit
+        in: query
+        schema:
+          type: integer
+          default: 10
+      - name: offset
+        in: query
+        schema:
+          type: integer
+          default: 0
+      responses:
+        '200':
+          description: A list of interviews.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    type: integer
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Interview'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /interviews/{id}:
+    get:
+      operationId: getInterview
+      summary: Get Interview
+      description: Returns details of a specific interview.
+      tags:
+      - Interviews
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: A single interview.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Interview'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+components:
+  schemas:
+    Interview:
+      type: object
+      description: An interview scheduled with a candidate.
+      properties:
+        id:
+          type: integer
+          description: Unique identifier for the interview.
+          readOnly: true
+        candidate:
+          type: integer
+          description: ID of the candidate being interviewed.
+        scheduled_at:
+          type: string
+          format: date-time
+          description: Scheduled date and time of the interview.
+          nullable: true
+        interviewer:
+          type: string
+          description: Name or identifier of the interviewer.
+          nullable: true
+        notes:
+          type: string
+          description: Notes about the interview.
+          nullable: true
+        created_at:
+          type: string
+          format: date-time
+          description: Timestamp when the interview was created.
+          readOnly: true
+    Error:
+      type: object
+      properties:
+        detail:
+          type: string
+          description: Human-readable error message.
+  responses:
+    NotFound:
+      description: The requested resource could not be found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Authentication credentials were not provided or are invalid.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  securitySchemes:
+    apiKey:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: API key generated from the Trakstar Hire Super Admin settings page. Pass as "ApiKey {your_api_key}".
+externalDocs:
+  description: Trakstar Hire API Reference
+  url: https://developers.recruiterbox.com/reference/introduction

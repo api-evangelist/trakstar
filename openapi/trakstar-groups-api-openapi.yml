@@ -1,0 +1,337 @@
+openapi: 3.0.3
+info:
+  title: Trakstar Hire Auth Groups API
+  description: The Trakstar Hire REST API (formerly Recruiterbox) enables developers to manage openings, candidates, candidate messages, internal notes, interviews, reviews, evaluations, and to-dos programmatically. It returns JSON responses and uses API key authentication generated from the account's Super Admin settings. The most common use cases include building custom career sites and syncing opening or candidate data with external systems.
+  version: '2'
+  contact:
+    name: Trakstar Hire Support
+    url: https://support.hire.trakstar.com/article/1617-accessing-the-hire-api
+  license:
+    name: Proprietary
+servers:
+- url: https://{companyName}.hire.trakstar.com/api/v2
+  description: Trakstar Hire API v2
+  variables:
+    companyName:
+      description: Your company subdomain name
+      default: yourcompany
+security:
+- apiKey: []
+tags:
+- name: Groups
+  description: Manage user groups
+paths:
+  /group:
+    get:
+      operationId: listGroups
+      summary: List Groups
+      description: Returns a list of all user groups in the organization.
+      tags:
+      - Groups
+      parameters:
+      - name: responseFormat
+        in: query
+        description: Format the response.
+        required: false
+        schema:
+          type: string
+          enum:
+          - array
+          - json
+      responses:
+        '200':
+          description: A list of user groups.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Group'
+              example:
+              - id: 1662730984
+                name: Test Group 1
+                userCount: 2
+              - id: 1662730985
+                name: Test Group 2
+                userCount: 5
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+    post:
+      operationId: addGroup
+      summary: Add Group
+      description: Creates a new user group in the organization.
+      tags:
+      - Groups
+      parameters:
+      - name: responseFormat
+        in: query
+        description: Format the response.
+        required: false
+        schema:
+          type: string
+          enum:
+          - array
+          - json
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - groupName
+              properties:
+                groupName:
+                  type: string
+                  description: Name for the new group.
+            example:
+              groupName: Engineering Team
+      responses:
+        '200':
+          description: Group created successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Group'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+  /group/{groupId}:
+    get:
+      operationId: getGroup
+      summary: Get Group
+      description: Returns user records in a specific group. Pass groupId of 0 to get all ungrouped users.
+      tags:
+      - Groups
+      parameters:
+      - name: groupId
+        in: path
+        required: true
+        description: The Mindflash ID of the group. Use 0 to retrieve all ungrouped users.
+        schema:
+          type: integer
+          format: int64
+      responses:
+        '200':
+          description: Group details with member users.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GroupDetail'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+  /group/{groupId}/user/{userId}:
+    post:
+      operationId: addUserToGroup
+      summary: Add User to Group
+      description: Adds a specific user to a specific group.
+      tags:
+      - Groups
+      parameters:
+      - name: groupId
+        in: path
+        required: true
+        description: The Mindflash ID of the group.
+        schema:
+          type: integer
+          format: int64
+      - name: userId
+        in: path
+        required: true
+        description: The Mindflash ID of the user.
+        schema:
+          type: integer
+          format: int64
+      responses:
+        '200':
+          description: User added to group successfully.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+    delete:
+      operationId: removeUserFromGroup
+      summary: Remove User from Group
+      description: Removes a specific user from a specific group.
+      tags:
+      - Groups
+      parameters:
+      - name: groupId
+        in: path
+        required: true
+        description: The Mindflash ID of the group.
+        schema:
+          type: integer
+          format: int64
+      - name: userId
+        in: path
+        required: true
+        description: The Mindflash ID of the user.
+        schema:
+          type: integer
+          format: int64
+      responses:
+        '200':
+          description: User removed from group successfully.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+components:
+  schemas:
+    GroupDetail:
+      allOf:
+      - $ref: '#/components/schemas/Group'
+      - type: object
+        properties:
+          users:
+            type: array
+            description: Users in this group.
+            items:
+              $ref: '#/components/schemas/User'
+    Group:
+      type: object
+      description: A user group in Trakstar Learn.
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: Unique Mindflash group identifier.
+          readOnly: true
+        name:
+          type: string
+          description: Name of the group.
+        userCount:
+          type: integer
+          description: Number of users in the group.
+          readOnly: true
+    Error:
+      type: object
+      properties:
+        message:
+          type: string
+          description: Human-readable error message.
+        errors:
+          type: array
+          items:
+            type: string
+    GroupSummary:
+      type: object
+      description: Summary of a group (used within user objects).
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+    User:
+      type: object
+      description: A user account in Trakstar Learn.
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: Unique Mindflash user identifier.
+          readOnly: true
+        name:
+          type: string
+          description: Full display name (Last, First format).
+          readOnly: true
+        firstName:
+          type: string
+          description: User's first name.
+        lastName:
+          type: string
+          description: User's last name.
+        username:
+          type: string
+          description: Unique username for login.
+        email:
+          type: string
+          format: email
+          description: User's email address.
+        status:
+          type: string
+          description: User's account status.
+          enum:
+          - Active
+          - Archived
+        type:
+          type: string
+          description: User's role/type in the system.
+          enum:
+          - Trainee
+          - Trainer
+          - Manager
+          - Administrator
+          - Reporter
+          - Team Lead
+        isOwner:
+          type: integer
+          description: Whether this user is the account owner (1) or not (0).
+          enum:
+          - 0
+          - 1
+        groups:
+          type: array
+          description: Groups the user belongs to.
+          items:
+            $ref: '#/components/schemas/GroupSummary'
+      example:
+        id: 333
+        name: Doe, John
+        firstName: John
+        lastName: Doe
+        username: jdoe
+        email: jdoe@yourorg.com
+        status: Active
+        type: Trainee
+        isOwner: 0
+        groups: []
+  responses:
+    Unauthorized:
+      description: Authentication credentials were not provided or are invalid.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    TooManyRequests:
+      description: Rate limit exceeded. The API enforces a limit of 10 requests per 10 seconds per API key.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: The requested resource could not be found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    BadRequest:
+      description: The request was invalid or cannot be otherwise served.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  securitySchemes:
+    apiKey:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: API key generated from the Trakstar Hire Super Admin settings page. Pass as "ApiKey {your_api_key}".
+externalDocs:
+  description: Trakstar Hire API Reference
+  url: https://developers.recruiterbox.com/reference/introduction

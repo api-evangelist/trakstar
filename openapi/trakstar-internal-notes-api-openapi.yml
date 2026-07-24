@@ -1,0 +1,136 @@
+openapi: 3.0.3
+info:
+  title: Trakstar Hire Auth Internal Notes API
+  description: The Trakstar Hire REST API (formerly Recruiterbox) enables developers to manage openings, candidates, candidate messages, internal notes, interviews, reviews, evaluations, and to-dos programmatically. It returns JSON responses and uses API key authentication generated from the account's Super Admin settings. The most common use cases include building custom career sites and syncing opening or candidate data with external systems.
+  version: '2'
+  contact:
+    name: Trakstar Hire Support
+    url: https://support.hire.trakstar.com/article/1617-accessing-the-hire-api
+  license:
+    name: Proprietary
+servers:
+- url: https://{companyName}.hire.trakstar.com/api/v2
+  description: Trakstar Hire API v2
+  variables:
+    companyName:
+      description: Your company subdomain name
+      default: yourcompany
+security:
+- apiKey: []
+tags:
+- name: Internal Notes
+  description: Manage internal notes on candidates
+paths:
+  /internalnotes:
+    get:
+      operationId: listInternalNotes
+      summary: List Internal Notes
+      description: Returns a list of internal notes, optionally filtered by candidate.
+      tags:
+      - Internal Notes
+      parameters:
+      - name: candidate
+        in: query
+        description: Filter notes by candidate ID.
+        required: false
+        schema:
+          type: integer
+      - name: limit
+        in: query
+        schema:
+          type: integer
+          default: 10
+      - name: offset
+        in: query
+        schema:
+          type: integer
+          default: 0
+      responses:
+        '200':
+          description: A list of internal notes.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    type: integer
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/InternalNote'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /internalnotes/{id}:
+    get:
+      operationId: getInternalNote
+      summary: Get Internal Note
+      description: Returns a single internal note by ID.
+      tags:
+      - Internal Notes
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: A single internal note.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalNote'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+components:
+  schemas:
+    InternalNote:
+      type: object
+      description: An internal note about a candidate.
+      properties:
+        id:
+          type: integer
+          description: Unique identifier for the note.
+          readOnly: true
+        candidate:
+          type: integer
+          description: ID of the candidate this note is about.
+        body:
+          type: string
+          description: Content of the note.
+        created_at:
+          type: string
+          format: date-time
+          description: Timestamp when the note was created.
+          readOnly: true
+    Error:
+      type: object
+      properties:
+        detail:
+          type: string
+          description: Human-readable error message.
+  responses:
+    NotFound:
+      description: The requested resource could not be found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Authentication credentials were not provided or are invalid.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  securitySchemes:
+    apiKey:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: API key generated from the Trakstar Hire Super Admin settings page. Pass as "ApiKey {your_api_key}".
+externalDocs:
+  description: Trakstar Hire API Reference
+  url: https://developers.recruiterbox.com/reference/introduction

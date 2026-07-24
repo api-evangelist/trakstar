@@ -1,0 +1,145 @@
+openapi: 3.0.3
+info:
+  title: Trakstar Hire Auth To-Dos API
+  description: The Trakstar Hire REST API (formerly Recruiterbox) enables developers to manage openings, candidates, candidate messages, internal notes, interviews, reviews, evaluations, and to-dos programmatically. It returns JSON responses and uses API key authentication generated from the account's Super Admin settings. The most common use cases include building custom career sites and syncing opening or candidate data with external systems.
+  version: '2'
+  contact:
+    name: Trakstar Hire Support
+    url: https://support.hire.trakstar.com/article/1617-accessing-the-hire-api
+  license:
+    name: Proprietary
+servers:
+- url: https://{companyName}.hire.trakstar.com/api/v2
+  description: Trakstar Hire API v2
+  variables:
+    companyName:
+      description: Your company subdomain name
+      default: yourcompany
+security:
+- apiKey: []
+tags:
+- name: To-Dos
+  description: Manage to-do items
+paths:
+  /todos:
+    get:
+      operationId: listTodos
+      summary: List To-Dos
+      description: Returns a list of to-do items, optionally filtered by candidate.
+      tags:
+      - To-Dos
+      parameters:
+      - name: candidate
+        in: query
+        description: Filter to-dos by candidate ID.
+        required: false
+        schema:
+          type: integer
+      - name: limit
+        in: query
+        schema:
+          type: integer
+          default: 10
+      - name: offset
+        in: query
+        schema:
+          type: integer
+          default: 0
+      responses:
+        '200':
+          description: A list of to-do items.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    type: integer
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Todo'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /todos/{id}:
+    get:
+      operationId: getTodo
+      summary: Get To-Do
+      description: Returns a single to-do item by ID.
+      tags:
+      - To-Dos
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: A single to-do item.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Todo'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+components:
+  schemas:
+    Error:
+      type: object
+      properties:
+        detail:
+          type: string
+          description: Human-readable error message.
+    Todo:
+      type: object
+      description: A to-do item related to a candidate.
+      properties:
+        id:
+          type: integer
+          description: Unique identifier for the to-do.
+          readOnly: true
+        candidate:
+          type: integer
+          description: ID of the candidate this to-do is associated with.
+        title:
+          type: string
+          description: Title of the to-do item.
+        due_date:
+          type: string
+          format: date
+          description: Due date of the to-do item.
+          nullable: true
+        completed:
+          type: boolean
+          description: Whether the to-do has been completed.
+          default: false
+        created_at:
+          type: string
+          format: date-time
+          description: Timestamp when the to-do was created.
+          readOnly: true
+  responses:
+    NotFound:
+      description: The requested resource could not be found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Authentication credentials were not provided or are invalid.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  securitySchemes:
+    apiKey:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: API key generated from the Trakstar Hire Super Admin settings page. Pass as "ApiKey {your_api_key}".
+externalDocs:
+  description: Trakstar Hire API Reference
+  url: https://developers.recruiterbox.com/reference/introduction

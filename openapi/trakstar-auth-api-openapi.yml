@@ -1,0 +1,128 @@
+openapi: 3.0.3
+info:
+  title: Trakstar Hire Auth API
+  description: The Trakstar Hire REST API (formerly Recruiterbox) enables developers to manage openings, candidates, candidate messages, internal notes, interviews, reviews, evaluations, and to-dos programmatically. It returns JSON responses and uses API key authentication generated from the account's Super Admin settings. The most common use cases include building custom career sites and syncing opening or candidate data with external systems.
+  version: '2'
+  contact:
+    name: Trakstar Hire Support
+    url: https://support.hire.trakstar.com/article/1617-accessing-the-hire-api
+  license:
+    name: Proprietary
+servers:
+- url: https://{companyName}.hire.trakstar.com/api/v2
+  description: Trakstar Hire API v2
+  variables:
+    companyName:
+      description: Your company subdomain name
+      default: yourcompany
+security:
+- apiKey: []
+tags:
+- name: Auth
+  description: Authentication and SSO operations
+paths:
+  /auth:
+    get:
+      operationId: authorizeUser
+      summary: Authorize User (SSO)
+      description: Generates a pre-formed SSO login URL for a user to authenticate into the Trakstar Learn application. Useful for single sign-on integrations and for checking if a user exists by email or username.
+      tags:
+      - Auth
+      parameters:
+      - name: id
+        in: query
+        description: The Mindflash ID of the user to log in.
+        required: false
+        schema:
+          type: integer
+          format: int64
+      - name: username
+        in: query
+        description: The Mindflash username of the user.
+        required: false
+        schema:
+          type: string
+      - name: email
+        in: query
+        description: The email address of the user.
+        required: false
+        schema:
+          type: string
+          format: email
+      responses:
+        '200':
+          description: SSO authentication details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+              example:
+                userId: 9999
+                userDisplayName: Joe Black
+                userEmail: joe.black@yourorganization.com
+                dashboardUrl: http://yourorg.mindflash.com/CreateCookie.aspx?sessionID2=AcAVGBh34343SD
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+components:
+  responses:
+    TooManyRequests:
+      description: Rate limit exceeded. The API enforces a limit of 10 requests per 10 seconds per API key.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Authentication credentials were not provided or are invalid.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: The requested resource could not be found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  schemas:
+    AuthResponse:
+      type: object
+      description: SSO authentication response.
+      properties:
+        userId:
+          type: integer
+          format: int64
+          description: Mindflash user ID.
+        userDisplayName:
+          type: string
+          description: Display name of the user.
+        userEmail:
+          type: string
+          format: email
+          description: Email address of the user.
+        dashboardUrl:
+          type: string
+          format: uri
+          description: Pre-authenticated URL to log the user into Trakstar Learn.
+    Error:
+      type: object
+      properties:
+        message:
+          type: string
+          description: Human-readable error message.
+        errors:
+          type: array
+          items:
+            type: string
+  securitySchemes:
+    apiKey:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: API key generated from the Trakstar Hire Super Admin settings page. Pass as "ApiKey {your_api_key}".
+externalDocs:
+  description: Trakstar Hire API Reference
+  url: https://developers.recruiterbox.com/reference/introduction

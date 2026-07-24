@@ -1,0 +1,139 @@
+openapi: 3.0.3
+info:
+  title: Trakstar Hire Auth Candidate Messages API
+  description: The Trakstar Hire REST API (formerly Recruiterbox) enables developers to manage openings, candidates, candidate messages, internal notes, interviews, reviews, evaluations, and to-dos programmatically. It returns JSON responses and uses API key authentication generated from the account's Super Admin settings. The most common use cases include building custom career sites and syncing opening or candidate data with external systems.
+  version: '2'
+  contact:
+    name: Trakstar Hire Support
+    url: https://support.hire.trakstar.com/article/1617-accessing-the-hire-api
+  license:
+    name: Proprietary
+servers:
+- url: https://{companyName}.hire.trakstar.com/api/v2
+  description: Trakstar Hire API v2
+  variables:
+    companyName:
+      description: Your company subdomain name
+      default: yourcompany
+security:
+- apiKey: []
+tags:
+- name: Candidate Messages
+  description: Manage messages sent to candidates
+paths:
+  /candidatemessages:
+    get:
+      operationId: listCandidateMessages
+      summary: List Candidate Messages
+      description: Returns a list of messages sent to candidates.
+      tags:
+      - Candidate Messages
+      parameters:
+      - name: candidate
+        in: query
+        description: Filter messages by candidate ID.
+        required: false
+        schema:
+          type: integer
+      - name: limit
+        in: query
+        schema:
+          type: integer
+          default: 10
+      - name: offset
+        in: query
+        schema:
+          type: integer
+          default: 0
+      responses:
+        '200':
+          description: A list of candidate messages.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    type: integer
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/CandidateMessage'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /candidatemessages/{id}:
+    get:
+      operationId: getCandidateMessage
+      summary: Get Candidate Message
+      description: Returns a single candidate message by ID.
+      tags:
+      - Candidate Messages
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: A single candidate message.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CandidateMessage'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+components:
+  schemas:
+    Error:
+      type: object
+      properties:
+        detail:
+          type: string
+          description: Human-readable error message.
+    CandidateMessage:
+      type: object
+      description: A message sent to a candidate.
+      properties:
+        id:
+          type: integer
+          description: Unique identifier for the message.
+          readOnly: true
+        candidate:
+          type: integer
+          description: ID of the candidate the message was sent to.
+        subject:
+          type: string
+          description: Subject of the message.
+        body:
+          type: string
+          description: Body of the message.
+        sent_at:
+          type: string
+          format: date-time
+          description: Timestamp when the message was sent.
+          readOnly: true
+  responses:
+    NotFound:
+      description: The requested resource could not be found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Authentication credentials were not provided or are invalid.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  securitySchemes:
+    apiKey:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: API key generated from the Trakstar Hire Super Admin settings page. Pass as "ApiKey {your_api_key}".
+externalDocs:
+  description: Trakstar Hire API Reference
+  url: https://developers.recruiterbox.com/reference/introduction
