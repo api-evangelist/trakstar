@@ -14,7 +14,20 @@ description: >-
   compliant and supports seamless integrations with HRIS, SSO, and
   communications applications.
 type: Index
-image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+accessModel:
+  pricing: enterprise
+  onboarding: self-serve
+  trial: false
+  try_now: false
+  public: false
+  label: Enterprise · Self-serve signup
+  confidence: high
+  source:
+  - plans
+  - authentication
+  generated: '2026-07-22'
+  method: derived
+image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/trakstar.png
 url: https://raw.githubusercontent.com/api-evangelist/trakstar/refs/heads/main/apis.yml
 created: '2026-06-13'
 modified: '2026-06-13'
@@ -31,59 +44,174 @@ tags:
   - Employee Development
   - Performance Appraisal
 apis:
-  - aid: trakstar:trakstar-hire-api
-    name: Trakstar Hire API
-    description: >-
-      The Trakstar Hire REST API enables developers to manage openings,
-      candidates, candidate messages, internal notes, interviews, reviews,
-      evaluations, and to-dos programmatically. It returns JSON responses and
-      uses API key authentication generated from the account's Super Admin
-      settings. The most common use cases include building custom career sites
-      and syncing opening or candidate data with external systems.
-    image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
-    humanURL: https://developers.recruiterbox.com/reference/introduction
-    baseURL: https://companyname.hire.trakstar.com/api/v1/
-    tags:
-      - Hiring
-      - Applicant Tracking
-      - Recruiting
-      - Candidates
-      - Job Openings
-    properties:
-      - type: Documentation
-        url: https://developers.recruiterbox.com/reference/introduction
-      - type: OpenAPI
-        url: https://raw.githubusercontent.com/api-evangelist/trakstar/refs/heads/main/openapi/trakstar-hire-api-openapi.yml
-    contact:
-      - FN: Trakstar Hire Support
-        url: https://support.hire.trakstar.com/article/1617-accessing-the-hire-api
-
-  - aid: trakstar:trakstar-learn-api
-    name: Trakstar Learn API
-    description: >-
-      The Trakstar Learn REST API allows developers to manage user accounts,
-      group assignments, course and module enrollments, user status, and
-      reporting programmatically. API keys are provisioned by the Trakstar Learn
-      support team upon request. The API supports pagination and filtering and
-      is fully self-service with implementation responsibility on the developer.
-    image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
-    humanURL: https://support.learn.trakstar.com/article/815-workflow-api-documentation
-    baseURL: https://api.learn.trakstar.com/
-    tags:
-      - Learning Management
-      - Training
-      - Course Enrollment
-      - User Management
-      - LMS
-    properties:
-      - type: Documentation
-        url: https://support.learn.trakstar.com/article/815-workflow-api-documentation
-      - type: OpenAPI
-        url: https://raw.githubusercontent.com/api-evangelist/trakstar/refs/heads/main/openapi/trakstar-learn-api-openapi.yml
-    contact:
-      - FN: Trakstar Learn Support
-        email: learn@trakstar.com
-
+- aid: trakstar:trakstar-auth-api
+  name: Trakstar Auth API
+  description: Authentication and SSO operations
+  humanURL: https://developers.recruiterbox.com/reference/introduction
+  baseURL: https://companyname.hire.trakstar.com/api/v1/
+  tags:
+  - Auth
+  properties:
+  - type: OpenAPI
+    url: openapi/trakstar-auth-api-openapi.yml
+  - type: Documentation
+    url: https://developers.recruiterbox.com/reference/introduction
+  - type: Documentation
+    url: https://support.learn.trakstar.com/article/815-workflow-api-documentation
+- aid: trakstar:trakstar-candidate-messages-api
+  name: Trakstar Candidate Messages API
+  description: Manage messages sent to candidates
+  humanURL: https://developers.recruiterbox.com/reference/introduction
+  baseURL: https://companyname.hire.trakstar.com/api/v1/
+  tags:
+  - Candidate Messages
+  properties:
+  - type: OpenAPI
+    url: openapi/trakstar-candidate-messages-api-openapi.yml
+  - type: Documentation
+    url: https://developers.recruiterbox.com/reference/introduction
+  - type: Documentation
+    url: https://support.learn.trakstar.com/article/815-workflow-api-documentation
+- aid: trakstar:trakstar-candidates-api
+  name: Trakstar Candidates API
+  description: Manage job candidates
+  humanURL: https://developers.recruiterbox.com/reference/introduction
+  baseURL: https://companyname.hire.trakstar.com/api/v1/
+  tags:
+  - Candidates
+  properties:
+  - type: OpenAPI
+    url: openapi/trakstar-candidates-api-openapi.yml
+  - type: Documentation
+    url: https://developers.recruiterbox.com/reference/introduction
+  - type: Documentation
+    url: https://support.learn.trakstar.com/article/815-workflow-api-documentation
+- aid: trakstar:trakstar-courses-api
+  name: Trakstar Courses API
+  description: Manage course enrollment and information
+  humanURL: https://developers.recruiterbox.com/reference/introduction
+  baseURL: https://companyname.hire.trakstar.com/api/v1/
+  tags:
+  - Courses
+  properties:
+  - type: OpenAPI
+    url: openapi/trakstar-courses-api-openapi.yml
+  - type: Documentation
+    url: https://developers.recruiterbox.com/reference/introduction
+  - type: Documentation
+    url: https://support.learn.trakstar.com/article/815-workflow-api-documentation
+- aid: trakstar:trakstar-evaluations-api
+  name: Trakstar Evaluations API
+  description: Manage candidate evaluations
+  humanURL: https://developers.recruiterbox.com/reference/introduction
+  baseURL: https://companyname.hire.trakstar.com/api/v1/
+  tags:
+  - Evaluations
+  properties:
+  - type: OpenAPI
+    url: openapi/trakstar-evaluations-api-openapi.yml
+  - type: Documentation
+    url: https://developers.recruiterbox.com/reference/introduction
+  - type: Documentation
+    url: https://support.learn.trakstar.com/article/815-workflow-api-documentation
+- aid: trakstar:trakstar-groups-api
+  name: Trakstar Groups API
+  description: Manage user groups
+  humanURL: https://developers.recruiterbox.com/reference/introduction
+  baseURL: https://companyname.hire.trakstar.com/api/v1/
+  tags:
+  - Groups
+  properties:
+  - type: OpenAPI
+    url: openapi/trakstar-groups-api-openapi.yml
+  - type: Documentation
+    url: https://developers.recruiterbox.com/reference/introduction
+  - type: Documentation
+    url: https://support.learn.trakstar.com/article/815-workflow-api-documentation
+- aid: trakstar:trakstar-internal-notes-api
+  name: Trakstar Internal Notes API
+  description: Manage internal notes on candidates
+  humanURL: https://developers.recruiterbox.com/reference/introduction
+  baseURL: https://companyname.hire.trakstar.com/api/v1/
+  tags:
+  - Internal Notes
+  properties:
+  - type: OpenAPI
+    url: openapi/trakstar-internal-notes-api-openapi.yml
+  - type: Documentation
+    url: https://developers.recruiterbox.com/reference/introduction
+  - type: Documentation
+    url: https://support.learn.trakstar.com/article/815-workflow-api-documentation
+- aid: trakstar:trakstar-interviews-api
+  name: Trakstar Interviews API
+  description: Manage candidate interviews
+  humanURL: https://developers.recruiterbox.com/reference/introduction
+  baseURL: https://companyname.hire.trakstar.com/api/v1/
+  tags:
+  - Interviews
+  properties:
+  - type: OpenAPI
+    url: openapi/trakstar-interviews-api-openapi.yml
+  - type: Documentation
+    url: https://developers.recruiterbox.com/reference/introduction
+  - type: Documentation
+    url: https://support.learn.trakstar.com/article/815-workflow-api-documentation
+- aid: trakstar:trakstar-openings-api
+  name: Trakstar Openings API
+  description: Manage job openings / positions
+  humanURL: https://developers.recruiterbox.com/reference/introduction
+  baseURL: https://companyname.hire.trakstar.com/api/v1/
+  tags:
+  - Openings
+  properties:
+  - type: OpenAPI
+    url: openapi/trakstar-openings-api-openapi.yml
+  - type: Documentation
+    url: https://developers.recruiterbox.com/reference/introduction
+  - type: Documentation
+    url: https://support.learn.trakstar.com/article/815-workflow-api-documentation
+- aid: trakstar:trakstar-reviews-api
+  name: Trakstar Reviews API
+  description: Manage candidate reviews
+  humanURL: https://developers.recruiterbox.com/reference/introduction
+  baseURL: https://companyname.hire.trakstar.com/api/v1/
+  tags:
+  - Reviews
+  properties:
+  - type: OpenAPI
+    url: openapi/trakstar-reviews-api-openapi.yml
+  - type: Documentation
+    url: https://developers.recruiterbox.com/reference/introduction
+  - type: Documentation
+    url: https://support.learn.trakstar.com/article/815-workflow-api-documentation
+- aid: trakstar:trakstar-to-dos-api
+  name: Trakstar To-Dos API
+  description: Manage to-do items
+  humanURL: https://developers.recruiterbox.com/reference/introduction
+  baseURL: https://companyname.hire.trakstar.com/api/v1/
+  tags:
+  - To-Dos
+  properties:
+  - type: OpenAPI
+    url: openapi/trakstar-to-dos-api-openapi.yml
+  - type: Documentation
+    url: https://developers.recruiterbox.com/reference/introduction
+  - type: Documentation
+    url: https://support.learn.trakstar.com/article/815-workflow-api-documentation
+- aid: trakstar:trakstar-users-api
+  name: Trakstar Users API
+  description: Manage user accounts
+  humanURL: https://developers.recruiterbox.com/reference/introduction
+  baseURL: https://companyname.hire.trakstar.com/api/v1/
+  tags:
+  - Users
+  properties:
+  - type: OpenAPI
+    url: openapi/trakstar-users-api-openapi.yml
+  - type: Documentation
+    url: https://developers.recruiterbox.com/reference/introduction
+  - type: Documentation
+    url: https://support.learn.trakstar.com/article/815-workflow-api-documentation
 common:
   - type: AgenticAccess
     url: agentic-access/trakstar-agentic-access.yml
