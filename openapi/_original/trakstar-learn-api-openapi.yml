@@ -1,0 +1,1041 @@
+openapi: 3.0.3
+info:
+  title: Trakstar Learn API
+  description: >-
+    The Trakstar Learn REST API (based on the Mindflash platform) allows developers to manage
+    user accounts, group assignments, course and module enrollments, user status, and
+    reporting programmatically. The API supports pagination and filtering. API keys are
+    provisioned by the Trakstar Learn support team upon request. The API enforces a rate
+    limit of 10 requests per 10 seconds per API key.
+  version: '3'
+  contact:
+    name: Trakstar Learn Support
+    email: learn@trakstar.com
+  license:
+    name: Proprietary
+externalDocs:
+  description: Trakstar Learn API Documentation
+  url: https://support.learn.trakstar.com/article/815-workflow-api-documentation
+servers:
+  - url: https://api.mindflash.com/api/v3
+    description: Trakstar Learn (Mindflash) API v3
+security:
+  - apiKey: []
+tags:
+  - name: Users
+    description: Manage user accounts
+  - name: Groups
+    description: Manage user groups
+  - name: Courses
+    description: Manage course enrollment and information
+  - name: Auth
+    description: Authentication and SSO operations
+paths:
+  /user:
+    get:
+      operationId: listUsers
+      summary: List Users
+      description: >-
+        Returns a list of all users in the organization. Supports filtering by status,
+        type, custom fields, and date ranges.
+      tags:
+        - Users
+      parameters:
+        - name: _status
+          in: query
+          description: Filter by user status.
+          required: false
+          schema:
+            type: string
+            enum:
+              - Active
+              - Archived
+              - All
+            default: All
+        - name: _type
+          in: query
+          description: Filter by user type.
+          required: false
+          schema:
+            type: string
+            enum:
+              - Trainee
+              - Trainer
+              - Manager
+              - Administrator
+              - All
+            default: All
+        - name: _createdAfter
+          in: query
+          description: >-
+            Filter by date user was created (on or after). Must be in ISO 8601 format
+            (e.g. 2017-01-21 or 2017-01-21T09:30:00Z).
+          required: false
+          schema:
+            type: string
+            format: date-time
+        - name: _modifiedAfter
+          in: query
+          description: >-
+            Filter by date user was modified (on or after). Must be in ISO 8601 format.
+          required: false
+          schema:
+            type: string
+            format: date-time
+      responses:
+        '200':
+          description: A list of users.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+    post:
+      operationId: addUsers
+      summary: Add Users
+      description: >-
+        Adds one or more users to the Trakstar Learn system. A maximum of 200 users
+        may be added per API call. Optionally enrolls users in courses and places
+        them in groups.
+      tags:
+        - Users
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddUsersRequest'
+            example:
+              users:
+                - firstName: John
+                  lastName: Doe
+                  email: jdoe@example.com
+                  username: jdoe
+                  permissions: 169000100
+              courseIds: []
+              groupIds: []
+              clientDatestamp: '2024-01-15'
+      responses:
+        '200':
+          description: Users added successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AddUsersResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+  /user/{userId}:
+    get:
+      operationId: getUser
+      summary: Get User
+      description: >-
+        Returns detailed information for a specific user by their Mindflash user ID,
+        including group membership and course enrollment information.
+      tags:
+        - Users
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          description: The Mindflash ID of the user.
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: A single user with detailed information.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserDetail'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+    post:
+      operationId: editUser
+      summary: Edit User
+      description: Updates user information for a specific user.
+      tags:
+        - Users
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          description: The Mindflash ID of the user to update.
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EditUserRequest'
+      responses:
+        '200':
+          description: User updated successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+  /user/{userId}/archive:
+    post:
+      operationId: archiveUser
+      summary: Archive User
+      description: >-
+        Archives a user. Archived users will be unable to take courses or log in
+        to the Trakstar Learn site.
+      tags:
+        - Users
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          description: The Mindflash ID of the user to archive.
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: User archived successfully.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+  /group:
+    get:
+      operationId: listGroups
+      summary: List Groups
+      description: Returns a list of all user groups in the organization.
+      tags:
+        - Groups
+      parameters:
+        - name: responseFormat
+          in: query
+          description: Format the response.
+          required: false
+          schema:
+            type: string
+            enum:
+              - array
+              - json
+      responses:
+        '200':
+          description: A list of user groups.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Group'
+              example:
+                - id: 1662730984
+                  name: Test Group 1
+                  userCount: 2
+                - id: 1662730985
+                  name: Test Group 2
+                  userCount: 5
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+    post:
+      operationId: addGroup
+      summary: Add Group
+      description: Creates a new user group in the organization.
+      tags:
+        - Groups
+      parameters:
+        - name: responseFormat
+          in: query
+          description: Format the response.
+          required: false
+          schema:
+            type: string
+            enum:
+              - array
+              - json
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - groupName
+              properties:
+                groupName:
+                  type: string
+                  description: Name for the new group.
+            example:
+              groupName: Engineering Team
+      responses:
+        '200':
+          description: Group created successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Group'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+  /group/{groupId}:
+    get:
+      operationId: getGroup
+      summary: Get Group
+      description: >-
+        Returns user records in a specific group. Pass groupId of 0 to get
+        all ungrouped users.
+      tags:
+        - Groups
+      parameters:
+        - name: groupId
+          in: path
+          required: true
+          description: >-
+            The Mindflash ID of the group. Use 0 to retrieve all ungrouped users.
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Group details with member users.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GroupDetail'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+  /group/{groupId}/user/{userId}:
+    post:
+      operationId: addUserToGroup
+      summary: Add User to Group
+      description: Adds a specific user to a specific group.
+      tags:
+        - Groups
+      parameters:
+        - name: groupId
+          in: path
+          required: true
+          description: The Mindflash ID of the group.
+          schema:
+            type: integer
+            format: int64
+        - name: userId
+          in: path
+          required: true
+          description: The Mindflash ID of the user.
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: User added to group successfully.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+    delete:
+      operationId: removeUserFromGroup
+      summary: Remove User from Group
+      description: Removes a specific user from a specific group.
+      tags:
+        - Groups
+      parameters:
+        - name: groupId
+          in: path
+          required: true
+          description: The Mindflash ID of the group.
+          schema:
+            type: integer
+            format: int64
+        - name: userId
+          in: path
+          required: true
+          description: The Mindflash ID of the user.
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: User removed from group successfully.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+  /course:
+    get:
+      operationId: listCourses
+      summary: List Courses
+      description: Returns a list of all courses in the organization.
+      tags:
+        - Courses
+      parameters:
+        - name: status
+          in: query
+          description: Filter results by course status.
+          required: false
+          schema:
+            type: string
+            enum:
+              - Active
+              - Archive
+              - All
+            default: All
+      responses:
+        '200':
+          description: A list of courses.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Course'
+              example:
+                - id: 1662438386
+                  name: Course A
+                  description: Introduction to safety procedures
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+  /course/{courseId}:
+    get:
+      operationId: getCourse
+      summary: Get Course
+      description: Returns detailed information for a specific course.
+      tags:
+        - Courses
+      parameters:
+        - name: courseId
+          in: path
+          required: true
+          description: The Mindflash ID of the course.
+          schema:
+            type: integer
+            format: int64
+        - name: status
+          in: query
+          description: Filter results by course status.
+          required: false
+          schema:
+            type: string
+            enum:
+              - Active
+              - Archive
+              - All
+      responses:
+        '200':
+          description: A single course with detailed information.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CourseDetail'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+  /course/{courseId}/user/{userId}:
+    post:
+      operationId: inviteUserToCourse
+      summary: Invite User to Course
+      description: Invites a specific user to a specific course.
+      tags:
+        - Courses
+      parameters:
+        - name: courseId
+          in: path
+          required: true
+          description: The Mindflash ID of the course.
+          schema:
+            type: integer
+            format: int64
+        - name: userId
+          in: path
+          required: true
+          description: The Mindflash ID of the user.
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                clientDatestamp:
+                  type: string
+                  format: date
+                  description: The current date in YYYY-MM-DD format.
+                required:
+                  type: boolean
+                  description: Set true to make the course required for the user.
+                  default: false
+            example:
+              clientDatestamp: '2024-01-15'
+              required: false
+      responses:
+        '200':
+          description: User invited to course successfully.
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+  /course/{courseId}/user:
+    post:
+      operationId: inviteUsersToCourse
+      summary: Invite Multiple Users to Course
+      description: Invites multiple users to a specific course.
+      tags:
+        - Courses
+      parameters:
+        - name: courseId
+          in: path
+          required: true
+          description: The Mindflash ID of the course.
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                userIds:
+                  type: array
+                  items:
+                    type: integer
+                    format: int64
+                  description: List of Mindflash user IDs to invite.
+                clientDatestamp:
+                  type: string
+                  format: date
+                  description: The current date in YYYY-MM-DD format.
+                required:
+                  type: boolean
+                  description: Set true to make the course required for the users.
+                  default: false
+      responses:
+        '200':
+          description: Users invited to course successfully.
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+  /auth:
+    get:
+      operationId: authorizeUser
+      summary: Authorize User (SSO)
+      description: >-
+        Generates a pre-formed SSO login URL for a user to authenticate into the
+        Trakstar Learn application. Useful for single sign-on integrations and for
+        checking if a user exists by email or username.
+      tags:
+        - Auth
+      parameters:
+        - name: id
+          in: query
+          description: The Mindflash ID of the user to log in.
+          required: false
+          schema:
+            type: integer
+            format: int64
+        - name: username
+          in: query
+          description: The Mindflash username of the user.
+          required: false
+          schema:
+            type: string
+        - name: email
+          in: query
+          description: The email address of the user.
+          required: false
+          schema:
+            type: string
+            format: email
+      responses:
+        '200':
+          description: SSO authentication details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+              example:
+                userId: 9999
+                userDisplayName: Joe Black
+                userEmail: joe.black@yourorganization.com
+                dashboardUrl: 'http://yourorg.mindflash.com/CreateCookie.aspx?sessionID2=AcAVGBh34343SD'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+components:
+  securitySchemes:
+    apiKey:
+      type: apiKey
+      in: header
+      name: x-mindflash-apikey
+      description: >-
+        API key provisioned by Trakstar Learn support team. Contact learn@trakstar.com
+        to request access.
+  schemas:
+    User:
+      type: object
+      description: A user account in Trakstar Learn.
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: Unique Mindflash user identifier.
+          readOnly: true
+        name:
+          type: string
+          description: Full display name (Last, First format).
+          readOnly: true
+        firstName:
+          type: string
+          description: User's first name.
+        lastName:
+          type: string
+          description: User's last name.
+        username:
+          type: string
+          description: Unique username for login.
+        email:
+          type: string
+          format: email
+          description: User's email address.
+        status:
+          type: string
+          description: User's account status.
+          enum:
+            - Active
+            - Archived
+        type:
+          type: string
+          description: User's role/type in the system.
+          enum:
+            - Trainee
+            - Trainer
+            - Manager
+            - Administrator
+            - Reporter
+            - Team Lead
+        isOwner:
+          type: integer
+          description: Whether this user is the account owner (1) or not (0).
+          enum:
+            - 0
+            - 1
+        groups:
+          type: array
+          description: Groups the user belongs to.
+          items:
+            $ref: '#/components/schemas/GroupSummary'
+      example:
+        id: 333
+        name: 'Doe, John'
+        firstName: John
+        lastName: Doe
+        username: jdoe
+        email: jdoe@yourorg.com
+        status: Active
+        type: Trainee
+        isOwner: 0
+        groups: []
+    UserDetail:
+      allOf:
+        - $ref: '#/components/schemas/User'
+        - type: object
+          description: Extended user information including courses.
+          properties:
+            courses:
+              type: array
+              description: Courses the user is enrolled in.
+              items:
+                $ref: '#/components/schemas/CourseEnrollment'
+    AddUsersRequest:
+      type: object
+      required:
+        - users
+        - clientDatestamp
+      description: Request body for adding one or more users.
+      properties:
+        users:
+          type: array
+          maxItems: 200
+          description: List of users to add. Maximum 200 users per call.
+          items:
+            $ref: '#/components/schemas/NewUser'
+        requiredCourseIds:
+          type: array
+          description: Course IDs to enroll users in with required flag enabled.
+          items:
+            type: integer
+            format: int64
+        courseIds:
+          type: array
+          description: Course IDs to enroll users in with required flag disabled.
+          items:
+            type: integer
+            format: int64
+        groupIds:
+          type: array
+          description: Group IDs to place the users in.
+          items:
+            type: integer
+            format: int64
+        clientDatestamp:
+          type: string
+          format: date
+          description: The current date in YYYY-MM-DD format.
+        batchId:
+          type: integer
+          description: Unique sequential number to identify this API call; returned in the response.
+    AddUsersResponse:
+      type: object
+      description: Response from adding users.
+      properties:
+        batchId:
+          type: integer
+          description: The batchId provided in the request.
+        usersAdded:
+          type: integer
+          description: Number of users successfully added.
+        errors:
+          type: array
+          description: Any errors encountered during the operation.
+          items:
+            type: object
+            properties:
+              email:
+                type: string
+              error:
+                type: string
+    NewUser:
+      type: object
+      required:
+        - firstName
+        - lastName
+      description: >-
+        User data for creating a new account. At least one of email or username must
+        be provided.
+      properties:
+        firstName:
+          type: string
+          maxLength: 35
+          description: User's first name.
+        lastName:
+          type: string
+          maxLength: 35
+          description: User's last name.
+        email:
+          type: string
+          format: email
+          maxLength: 254
+          description: User's email address. At least one of email or username is required.
+        username:
+          type: string
+          maxLength: 254
+          description: Unique username. At least one of email or username is required.
+        permissions:
+          type: integer
+          description: >-
+            User role permission code. Default is Trainee (169000100).
+          enum:
+            - 169000100
+            - 169000200
+            - 169000300
+            - 169000400
+            - 169000500
+            - 169000600
+          default: 169000100
+        password:
+          type: string
+          maxLength: 35
+          description: Login password. Allows user to login via the Trakstar Learn website.
+        yammerId:
+          type: string
+          description: Yammer ID of the user.
+        customfield0:
+          type: string
+          description: Custom field 0.
+        customfield1:
+          type: string
+          description: Custom field 1.
+        customfield2:
+          type: string
+          description: Custom field 2.
+        customfield3:
+          type: string
+          description: Custom field 3.
+        customfield4:
+          type: string
+          description: Custom field 4.
+        customfield5:
+          type: string
+          description: Custom field 5.
+        customfield6:
+          type: string
+          description: Custom field 6.
+        customfield7:
+          type: string
+          description: Custom field 7.
+        customfield8:
+          type: string
+          description: Custom field 8.
+        customfield9:
+          type: string
+          description: Custom field 9.
+    EditUserRequest:
+      type: object
+      description: Fields to update on an existing user account.
+      properties:
+        firstName:
+          type: string
+          maxLength: 35
+        lastName:
+          type: string
+          maxLength: 35
+        email:
+          type: string
+          format: email
+          maxLength: 254
+        username:
+          type: string
+          maxLength: 254
+        permissions:
+          type: integer
+          enum:
+            - 169000100
+            - 169000200
+            - 169000300
+            - 169000400
+            - 169000500
+            - 169000600
+        customfield0:
+          type: string
+        customfield1:
+          type: string
+        customfield2:
+          type: string
+        customfield3:
+          type: string
+        customfield4:
+          type: string
+        customfield5:
+          type: string
+        customfield6:
+          type: string
+        customfield7:
+          type: string
+        customfield8:
+          type: string
+        customfield9:
+          type: string
+    Group:
+      type: object
+      description: A user group in Trakstar Learn.
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: Unique Mindflash group identifier.
+          readOnly: true
+        name:
+          type: string
+          description: Name of the group.
+        userCount:
+          type: integer
+          description: Number of users in the group.
+          readOnly: true
+    GroupSummary:
+      type: object
+      description: Summary of a group (used within user objects).
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+    GroupDetail:
+      allOf:
+        - $ref: '#/components/schemas/Group'
+        - type: object
+          properties:
+            users:
+              type: array
+              description: Users in this group.
+              items:
+                $ref: '#/components/schemas/User'
+    Course:
+      type: object
+      description: A course in Trakstar Learn.
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: Unique Mindflash course identifier.
+          readOnly: true
+        name:
+          type: string
+          description: Name of the course.
+        description:
+          type: string
+          description: Course description.
+          nullable: true
+        status:
+          type: string
+          description: Course status.
+          enum:
+            - Active
+            - Archive
+    CourseDetail:
+      allOf:
+        - $ref: '#/components/schemas/Course'
+        - type: object
+          properties:
+            modules:
+              type: array
+              description: Modules within the course.
+              items:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    format: int64
+                  name:
+                    type: string
+                  type:
+                    type: string
+    CourseEnrollment:
+      type: object
+      description: A course enrollment for a user.
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: Course ID.
+        name:
+          type: string
+          description: Course name.
+        status:
+          type: string
+          description: Enrollment/completion status.
+        required:
+          type: boolean
+          description: Whether the course is required for this user.
+        enrolledAt:
+          type: string
+          format: date-time
+          description: When the user was enrolled.
+          nullable: true
+        completedAt:
+          type: string
+          format: date-time
+          description: When the user completed the course.
+          nullable: true
+    AuthResponse:
+      type: object
+      description: SSO authentication response.
+      properties:
+        userId:
+          type: integer
+          format: int64
+          description: Mindflash user ID.
+        userDisplayName:
+          type: string
+          description: Display name of the user.
+        userEmail:
+          type: string
+          format: email
+          description: Email address of the user.
+        dashboardUrl:
+          type: string
+          format: uri
+          description: Pre-authenticated URL to log the user into Trakstar Learn.
+    Error:
+      type: object
+      properties:
+        message:
+          type: string
+          description: Human-readable error message.
+        errors:
+          type: array
+          items:
+            type: string
+  responses:
+    Unauthorized:
+      description: Authentication credentials were not provided or are invalid.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    BadRequest:
+      description: The request was invalid or cannot be otherwise served.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: The requested resource could not be found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    TooManyRequests:
+      description: >-
+        Rate limit exceeded. The API enforces a limit of 10 requests per 10 seconds
+        per API key.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'

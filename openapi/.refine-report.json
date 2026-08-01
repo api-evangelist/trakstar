@@ -1,0 +1,36 @@
+{
+  "provider": "trakstar",
+  "sources": [
+    "trakstar-auth-api-openapi.yml",
+    "trakstar-candidate-messages-api-openapi.yml",
+    "trakstar-candidates-api-openapi.yml",
+    "trakstar-courses-api-openapi.yml",
+    "trakstar-evaluations-api-openapi.yml",
+    "trakstar-groups-api-openapi.yml",
+    "trakstar-internal-notes-api-openapi.yml",
+    "trakstar-interviews-api-openapi.yml",
+    "trakstar-openings-api-openapi.yml",
+    "trakstar-reviews-api-openapi.yml",
+    "trakstar-to-dos-api-openapi.yml",
+    "trakstar-users-api-openapi.yml"
+  ],
+  "outputs": [
+    "trakstar-auth-api-openapi.yml",
+    "trakstar-candidate-messages-api-openapi.yml",
+    "trakstar-candidates-api-openapi.yml",
+    "trakstar-courses-api-openapi.yml",
+    "trakstar-evaluations-api-openapi.yml",
+    "trakstar-groups-api-openapi.yml",
+    "trakstar-internal-notes-api-openapi.yml",
+    "trakstar-interviews-api-openapi.yml",
+    "trakstar-openings-api-openapi.yml",
+    "trakstar-reviews-api-openapi.yml",
+    "trakstar-to-dos-api-openapi.yml",
+    "trakstar-users-api-openapi.yml"
+  ],
+  "archived": [],
+  "errors": [],
+  "warnings": [],
+  "notes": [],
+  "skipped": []
+}
