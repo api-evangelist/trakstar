@@ -1,0 +1,137 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Trakstar Hire Auth Groups API",
+    "version": "2"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "Authorization",
+      "value": "{{Authorization}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Groups",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List Groups",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{companyName}.hire.trakstar.com/api/v2/group",
+            "params": [
+              {
+                "name": "responseFormat",
+                "value": "",
+                "type": "query",
+                "description": "Format the response."
+              }
+            ]
+          },
+          "docs": "Returns a list of all user groups in the organization."
+        },
+        {
+          "info": {
+            "name": "Add Group",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{companyName}.hire.trakstar.com/api/v2/group",
+            "params": [
+              {
+                "name": "responseFormat",
+                "value": "",
+                "type": "query",
+                "description": "Format the response."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a new user group in the organization."
+        },
+        {
+          "info": {
+            "name": "Get Group",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{companyName}.hire.trakstar.com/api/v2/group/:groupId",
+            "params": [
+              {
+                "name": "groupId",
+                "value": "",
+                "type": "path",
+                "description": "The Mindflash ID of the group. Use 0 to retrieve all ungrouped users."
+              }
+            ]
+          },
+          "docs": "Returns user records in a specific group. Pass groupId of 0 to get all ungrouped users."
+        },
+        {
+          "info": {
+            "name": "Add User to Group",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{companyName}.hire.trakstar.com/api/v2/group/:groupId/user/:userId",
+            "params": [
+              {
+                "name": "groupId",
+                "value": "",
+                "type": "path",
+                "description": "The Mindflash ID of the group."
+              },
+              {
+                "name": "userId",
+                "value": "",
+                "type": "path",
+                "description": "The Mindflash ID of the user."
+              }
+            ]
+          },
+          "docs": "Adds a specific user to a specific group."
+        },
+        {
+          "info": {
+            "name": "Remove User from Group",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://{companyName}.hire.trakstar.com/api/v2/group/:groupId/user/:userId",
+            "params": [
+              {
+                "name": "groupId",
+                "value": "",
+                "type": "path",
+                "description": "The Mindflash ID of the group."
+              },
+              {
+                "name": "userId",
+                "value": "",
+                "type": "path",
+                "description": "The Mindflash ID of the user."
+              }
+            ]
+          },
+          "docs": "Removes a specific user from a specific group."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

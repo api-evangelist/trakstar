@@ -1,0 +1,243 @@
+{
+  "item": [
+    {
+      "id": "95495b98-a766-45f0-bfcd-39e9f4443c2d",
+      "name": "Evaluations",
+      "description": {
+        "content": "Manage candidate evaluations",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "ac3a047b-b0cb-47a5-a984-0b55c07f0239",
+          "name": "List Evaluations",
+          "request": {
+            "name": "List Evaluations",
+            "description": {
+              "content": "Returns a list of evaluations, optionally filtered by candidate.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "evaluations"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "candidate",
+                  "value": "<integer>",
+                  "description": "Filter evaluations by candidate ID."
+                },
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "10"
+                },
+                {
+                  "disabled": false,
+                  "key": "offset",
+                  "value": "0"
+                }
+              ],
+              "variable": [
+                {
+                  "description": "Your company subdomain name",
+                  "type": "any",
+                  "value": "{{companyName}}",
+                  "key": "companyName"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "3911848e-d608-4748-97e1-9600bbe9515f",
+              "name": "A list of evaluations.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "evaluations"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "candidate",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "10"
+                    },
+                    {
+                      "key": "offset",
+                      "value": "0"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "description": "Your company subdomain name",
+                      "type": "any",
+                      "value": "{{companyName}}",
+                      "key": "companyName"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"count\": 2894,\n  \"results\": [\n    {\n      \"id\": 5200,\n      \"candidate\": 2882,\n      \"result\": \"string\",\n      \"notes\": \"string\",\n      \"created_at\": \"1964-04-20T16:16:52.223Z\"\n    },\n    {\n      \"id\": 1986,\n      \"candidate\": 2234,\n      \"result\": \"string\",\n      \"notes\": \"string\",\n      \"created_at\": \"1974-11-18T08:16:53.553Z\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "5d2453de-06da-4103-8a7b-8e1ca9627b0c",
+              "name": "Authentication credentials were not provided or are invalid.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "evaluations"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "candidate",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "10"
+                    },
+                    {
+                      "key": "offset",
+                      "value": "0"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "description": "Your company subdomain name",
+                      "type": "any",
+                      "value": "{{companyName}}",
+                      "key": "companyName"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "description": {
+        "content": "Your company subdomain name",
+        "type": "text/plain"
+      },
+      "type": "any",
+      "value": "yourcompany",
+      "key": "companyName"
+    },
+    {
+      "type": "string",
+      "value": "https://{{companyName}}.hire.trakstar.com/api/v2",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "key",
+        "value": "Authorization"
+      },
+      {
+        "key": "value",
+        "value": "{{apiKey}}"
+      },
+      {
+        "key": "in",
+        "value": "header"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "4399964d-1c91-4509-8c2e-b9342f30184f",
+    "name": "Trakstar Hire Auth Evaluations API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "The Trakstar Hire REST API (formerly Recruiterbox) enables developers to manage openings, candidates, candidate messages, internal notes, interviews, reviews, evaluations, and to-dos programmatically. It returns JSON responses and uses API key authentication generated from the account's Super Admin settings. The most common use cases include building custom career sites and syncing opening or candidate data with external systems.\n\nContact Support:\n Name: Trakstar Hire Support",
+      "type": "text/plain"
+    }
+  }
+}

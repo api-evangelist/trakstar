@@ -1,0 +1,73 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Trakstar Hire Auth Internal Notes API",
+    "version": "2"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "Authorization",
+      "value": "{{Authorization}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Internal Notes",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List Internal Notes",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{companyName}.hire.trakstar.com/api/v2/internalnotes",
+            "params": [
+              {
+                "name": "candidate",
+                "value": "",
+                "type": "query",
+                "description": "Filter notes by candidate ID."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Returns a list of internal notes, optionally filtered by candidate."
+        },
+        {
+          "info": {
+            "name": "Get Internal Note",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{companyName}.hire.trakstar.com/api/v2/internalnotes/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Returns a single internal note by ID."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

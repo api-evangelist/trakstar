@@ -1,0 +1,139 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Trakstar Hire Auth Users API",
+    "version": "2"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "Authorization",
+      "value": "{{Authorization}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Users",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List Users",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{companyName}.hire.trakstar.com/api/v2/user",
+            "params": [
+              {
+                "name": "_status",
+                "value": "",
+                "type": "query",
+                "description": "Filter by user status."
+              },
+              {
+                "name": "_type",
+                "value": "",
+                "type": "query",
+                "description": "Filter by user type."
+              },
+              {
+                "name": "_createdAfter",
+                "value": "",
+                "type": "query",
+                "description": "Filter by date user was created (on or after). Must be in ISO 8601 format (e.g. 2017-01-21 or 2017-01-21T09:30:00Z)."
+              },
+              {
+                "name": "_modifiedAfter",
+                "value": "",
+                "type": "query",
+                "description": "Filter by date user was modified (on or after). Must be in ISO 8601 format."
+              }
+            ]
+          },
+          "docs": "Returns a list of all users in the organization. Supports filtering by status, type, custom fields, and date ranges."
+        },
+        {
+          "info": {
+            "name": "Add Users",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{companyName}.hire.trakstar.com/api/v2/user",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Adds one or more users to the Trakstar Learn system. A maximum of 200 users may be added per API call. Optionally enrolls users in courses and places them in groups."
+        },
+        {
+          "info": {
+            "name": "Get User",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{companyName}.hire.trakstar.com/api/v2/user/:userId",
+            "params": [
+              {
+                "name": "userId",
+                "value": "",
+                "type": "path",
+                "description": "The Mindflash ID of the user."
+              }
+            ]
+          },
+          "docs": "Returns detailed information for a specific user by their Mindflash user ID, including group membership and course enrollment information."
+        },
+        {
+          "info": {
+            "name": "Edit User",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{companyName}.hire.trakstar.com/api/v2/user/:userId",
+            "params": [
+              {
+                "name": "userId",
+                "value": "",
+                "type": "path",
+                "description": "The Mindflash ID of the user to update."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Updates user information for a specific user."
+        },
+        {
+          "info": {
+            "name": "Archive User",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{companyName}.hire.trakstar.com/api/v2/user/:userId/archive",
+            "params": [
+              {
+                "name": "userId",
+                "value": "",
+                "type": "path",
+                "description": "The Mindflash ID of the user to archive."
+              }
+            ]
+          },
+          "docs": "Archives a user. Archived users will be unable to take courses or log in to the Trakstar Learn site."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

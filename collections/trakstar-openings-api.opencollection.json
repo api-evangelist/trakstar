@@ -1,0 +1,91 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Trakstar Hire Auth Openings API",
+    "version": "2"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "Authorization",
+      "value": "{{Authorization}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Openings",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List Openings",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{companyName}.hire.trakstar.com/api/v2/openings",
+            "params": [
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Number of results per page."
+              },
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query",
+                "description": "Number of results to skip for pagination."
+              },
+              {
+                "name": "status",
+                "value": "",
+                "type": "query",
+                "description": "Filter openings by status."
+              }
+            ]
+          },
+          "docs": "Returns a paginated list of all job openings in the account."
+        },
+        {
+          "info": {
+            "name": "Create Opening",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{companyName}.hire.trakstar.com/api/v2/openings",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a new job opening."
+        },
+        {
+          "info": {
+            "name": "Get Opening",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{companyName}.hire.trakstar.com/api/v2/openings/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the opening."
+              }
+            ]
+          },
+          "docs": "Returns a single job opening by ID."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

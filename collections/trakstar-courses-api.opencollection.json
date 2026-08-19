@@ -1,0 +1,122 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Trakstar Hire Auth Courses API",
+    "version": "2"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "Authorization",
+      "value": "{{Authorization}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Courses",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List Courses",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{companyName}.hire.trakstar.com/api/v2/course",
+            "params": [
+              {
+                "name": "status",
+                "value": "",
+                "type": "query",
+                "description": "Filter results by course status."
+              }
+            ]
+          },
+          "docs": "Returns a list of all courses in the organization."
+        },
+        {
+          "info": {
+            "name": "Get Course",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{companyName}.hire.trakstar.com/api/v2/course/:courseId",
+            "params": [
+              {
+                "name": "courseId",
+                "value": "",
+                "type": "path",
+                "description": "The Mindflash ID of the course."
+              },
+              {
+                "name": "status",
+                "value": "",
+                "type": "query",
+                "description": "Filter results by course status."
+              }
+            ]
+          },
+          "docs": "Returns detailed information for a specific course."
+        },
+        {
+          "info": {
+            "name": "Invite User to Course",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{companyName}.hire.trakstar.com/api/v2/course/:courseId/user/:userId",
+            "params": [
+              {
+                "name": "courseId",
+                "value": "",
+                "type": "path",
+                "description": "The Mindflash ID of the course."
+              },
+              {
+                "name": "userId",
+                "value": "",
+                "type": "path",
+                "description": "The Mindflash ID of the user."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Invites a specific user to a specific course."
+        },
+        {
+          "info": {
+            "name": "Invite Multiple Users to Course",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{companyName}.hire.trakstar.com/api/v2/course/:courseId/user",
+            "params": [
+              {
+                "name": "courseId",
+                "value": "",
+                "type": "path",
+                "description": "The Mindflash ID of the course."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Invites multiple users to a specific course."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,57 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Trakstar Hire Auth API",
+    "version": "2"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "Authorization",
+      "value": "{{Authorization}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Auth",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Authorize User (SSO)",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{companyName}.hire.trakstar.com/api/v2/auth",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "query",
+                "description": "The Mindflash ID of the user to log in."
+              },
+              {
+                "name": "username",
+                "value": "",
+                "type": "query",
+                "description": "The Mindflash username of the user."
+              },
+              {
+                "name": "email",
+                "value": "",
+                "type": "query",
+                "description": "The email address of the user."
+              }
+            ]
+          },
+          "docs": "Generates a pre-formed SSO login URL for a user to authenticate into the Trakstar Learn application. Useful for single sign-on integrations and for checking if a user exists by email or username."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

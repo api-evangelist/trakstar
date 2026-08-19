@@ -1,0 +1,133 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Trakstar Hire Auth Candidates API",
+    "version": "2"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "Authorization",
+      "value": "{{Authorization}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Candidates",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List Candidates",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{companyName}.hire.trakstar.com/api/v2/candidates",
+            "params": [
+              {
+                "name": "opening",
+                "value": "",
+                "type": "query",
+                "description": "Filter candidates by opening ID."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Number of results per page."
+              },
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query",
+                "description": "Number of results to skip for pagination."
+              }
+            ]
+          },
+          "docs": "Returns a paginated list of candidates, optionally filtered by opening."
+        },
+        {
+          "info": {
+            "name": "Create Candidate",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{companyName}.hire.trakstar.com/api/v2/candidates",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a new candidate record."
+        },
+        {
+          "info": {
+            "name": "Get Candidate",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{companyName}.hire.trakstar.com/api/v2/candidates/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the candidate."
+              }
+            ]
+          },
+          "docs": "Returns a single candidate by ID."
+        },
+        {
+          "info": {
+            "name": "Update Candidate",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://{companyName}.hire.trakstar.com/api/v2/candidates/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the candidate."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Partially updates a candidate record."
+        },
+        {
+          "info": {
+            "name": "Delete Candidate",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://{companyName}.hire.trakstar.com/api/v2/candidates/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the candidate."
+              }
+            ]
+          },
+          "docs": "Deletes a candidate record."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,73 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Trakstar Hire Auth To-Dos API",
+    "version": "2"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "Authorization",
+      "value": "{{Authorization}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "To-Dos",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List To-Dos",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{companyName}.hire.trakstar.com/api/v2/todos",
+            "params": [
+              {
+                "name": "candidate",
+                "value": "",
+                "type": "query",
+                "description": "Filter to-dos by candidate ID."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Returns a list of to-do items, optionally filtered by candidate."
+        },
+        {
+          "info": {
+            "name": "Get To-Do",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{companyName}.hire.trakstar.com/api/v2/todos/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Returns a single to-do item by ID."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}
