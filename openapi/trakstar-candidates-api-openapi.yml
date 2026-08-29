@@ -1,6 +1,6 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
-  title: Trakstar Hire Auth Candidates API
+  title: Trakstar Hire Candidates API
   description: The Trakstar Hire REST API (formerly Recruiterbox) enables developers to manage openings, candidates, candidate messages, internal notes, interviews, reviews, evaluations, and to-dos programmatically. It returns JSON responses and uses API key authentication generated from the account's Super Admin settings. The most common use cases include building custom career sites and syncing opening or candidate data with external systems.
   version: '2'
   contact:
@@ -61,11 +61,13 @@ paths:
                   count:
                     type: integer
                   next:
-                    type: string
-                    nullable: true
+                    type:
+                    - string
+                    - 'null'
                   previous:
-                    type: string
-                    nullable: true
+                    type:
+                    - string
+                    - 'null'
                   results:
                     type: array
                     items:
@@ -174,8 +176,8 @@ paths:
           $ref: '#/components/responses/NotFound'
 components:
   responses:
-    Unauthorized:
-      description: Authentication credentials were not provided or are invalid.
+    BadRequest:
+      description: The request was invalid or cannot be otherwise served.
       content:
         application/json:
           schema:
@@ -186,13 +188,19 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
-    BadRequest:
-      description: The request was invalid or cannot be otherwise served.
+    Unauthorized:
+      description: Authentication credentials were not provided or are invalid.
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
   schemas:
+    Error:
+      type: object
+      properties:
+        detail:
+          type: string
+          description: Human-readable error message.
     CandidateInput:
       type: object
       required:
@@ -211,22 +219,18 @@ components:
           format: email
           description: Candidate's email address.
         phone:
-          type: string
+          type:
+          - string
+          - 'null'
           description: Candidate's phone number.
-          nullable: true
         opening:
           type: integer
           description: ID of the opening the candidate is applying to.
         source:
-          type: string
+          type:
+          - string
+          - 'null'
           description: Source of the candidate application.
-          nullable: true
-    Error:
-      type: object
-      properties:
-        detail:
-          type: string
-          description: Human-readable error message.
     Candidate:
       type: object
       description: A candidate applying to a job opening.
@@ -246,20 +250,23 @@ components:
           format: email
           description: Candidate's email address.
         phone:
-          type: string
+          type:
+          - string
+          - 'null'
           description: Candidate's phone number.
-          nullable: true
         opening:
           type: integer
           description: ID of the opening the candidate is applying to.
         stage:
-          type: string
+          type:
+          - string
+          - 'null'
           description: Current stage of the candidate in the hiring pipeline.
-          nullable: true
         source:
-          type: string
+          type:
+          - string
+          - 'null'
           description: Source of the candidate application.
-          nullable: true
         created_at:
           type: string
           format: date-time

@@ -1,36 +1,43 @@
 {
   "provider": "trakstar",
   "sources": [
-    "trakstar-auth-api-openapi.yml",
-    "trakstar-candidate-messages-api-openapi.yml",
-    "trakstar-candidates-api-openapi.yml",
-    "trakstar-courses-api-openapi.yml",
-    "trakstar-evaluations-api-openapi.yml",
-    "trakstar-groups-api-openapi.yml",
-    "trakstar-internal-notes-api-openapi.yml",
-    "trakstar-interviews-api-openapi.yml",
-    "trakstar-openings-api-openapi.yml",
-    "trakstar-reviews-api-openapi.yml",
-    "trakstar-to-dos-api-openapi.yml",
-    "trakstar-users-api-openapi.yml"
+    "_original/trakstar-hire-api-openapi.yml",
+    "_original/trakstar-learn-api-openapi.yml"
   ],
   "outputs": [
-    "trakstar-auth-api-openapi.yml",
     "trakstar-candidate-messages-api-openapi.yml",
     "trakstar-candidates-api-openapi.yml",
-    "trakstar-courses-api-openapi.yml",
     "trakstar-evaluations-api-openapi.yml",
-    "trakstar-groups-api-openapi.yml",
     "trakstar-internal-notes-api-openapi.yml",
     "trakstar-interviews-api-openapi.yml",
     "trakstar-openings-api-openapi.yml",
     "trakstar-reviews-api-openapi.yml",
     "trakstar-to-dos-api-openapi.yml",
+    "trakstar-auth-api-openapi.yml",
+    "trakstar-courses-api-openapi.yml",
+    "trakstar-groups-api-openapi.yml",
     "trakstar-users-api-openapi.yml"
   ],
   "archived": [],
   "errors": [],
   "warnings": [],
-  "notes": [],
-  "skipped": []
+  "notes": [
+    "sourced from openapi/_original/ (2 archived document(s)); previously refined output at the top level was skipped rather than re-split",
+    "trakstar-hire-api-openapi.yml: upgraded openapi 3.0.3 -> OpenAPI 3.2.0",
+    "trakstar-learn-api-openapi.yml: upgraded openapi 3.0.3 -> OpenAPI 3.2.0"
+  ],
+  "skipped": [
+    "trakstar-auth-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "trakstar-candidate-messages-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "trakstar-candidates-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "trakstar-courses-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "trakstar-evaluations-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "trakstar-groups-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "trakstar-internal-notes-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "trakstar-interviews-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "trakstar-openings-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "trakstar-reviews-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "trakstar-to-dos-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "trakstar-users-api-openapi.yml: previously refined output, superseded by openapi/_original/"
+  ]
 }

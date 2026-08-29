@@ -1,6 +1,6 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
-  title: Trakstar Hire Auth Interviews API
+  title: Trakstar Hire Interviews API
   description: The Trakstar Hire REST API (formerly Recruiterbox) enables developers to manage openings, candidates, candidate messages, internal notes, interviews, reviews, evaluations, and to-dos programmatically. It returns JSON responses and uses API key authentication generated from the account's Super Admin settings. The most common use cases include building custom career sites and syncing opening or candidate data with external systems.
   version: '2'
   contact:
@@ -86,42 +86,6 @@ paths:
         '404':
           $ref: '#/components/responses/NotFound'
 components:
-  schemas:
-    Interview:
-      type: object
-      description: An interview scheduled with a candidate.
-      properties:
-        id:
-          type: integer
-          description: Unique identifier for the interview.
-          readOnly: true
-        candidate:
-          type: integer
-          description: ID of the candidate being interviewed.
-        scheduled_at:
-          type: string
-          format: date-time
-          description: Scheduled date and time of the interview.
-          nullable: true
-        interviewer:
-          type: string
-          description: Name or identifier of the interviewer.
-          nullable: true
-        notes:
-          type: string
-          description: Notes about the interview.
-          nullable: true
-        created_at:
-          type: string
-          format: date-time
-          description: Timestamp when the interview was created.
-          readOnly: true
-    Error:
-      type: object
-      properties:
-        detail:
-          type: string
-          description: Human-readable error message.
   responses:
     NotFound:
       description: The requested resource could not be found.
@@ -135,6 +99,45 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
+  schemas:
+    Error:
+      type: object
+      properties:
+        detail:
+          type: string
+          description: Human-readable error message.
+    Interview:
+      type: object
+      description: An interview scheduled with a candidate.
+      properties:
+        id:
+          type: integer
+          description: Unique identifier for the interview.
+          readOnly: true
+        candidate:
+          type: integer
+          description: ID of the candidate being interviewed.
+        scheduled_at:
+          type:
+          - string
+          - 'null'
+          format: date-time
+          description: Scheduled date and time of the interview.
+        interviewer:
+          type:
+          - string
+          - 'null'
+          description: Name or identifier of the interviewer.
+        notes:
+          type:
+          - string
+          - 'null'
+          description: Notes about the interview.
+        created_at:
+          type: string
+          format: date-time
+          description: Timestamp when the interview was created.
+          readOnly: true
   securitySchemes:
     apiKey:
       type: apiKey

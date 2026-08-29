@@ -1,6 +1,6 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
-  title: Trakstar Hire Auth Reviews API
+  title: Trakstar Hire Reviews API
   description: The Trakstar Hire REST API (formerly Recruiterbox) enables developers to manage openings, candidates, candidate messages, internal notes, interviews, reviews, evaluations, and to-dos programmatically. It returns JSON responses and uses API key authentication generated from the account's Super Admin settings. The most common use cases include building custom career sites and syncing opening or candidate data with external systems.
   version: '2'
   contact:
@@ -86,6 +86,19 @@ paths:
         '404':
           $ref: '#/components/responses/NotFound'
 components:
+  responses:
+    NotFound:
+      description: The requested resource could not be found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Authentication credentials were not provided or are invalid.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   schemas:
     Error:
       type: object
@@ -105,35 +118,25 @@ components:
           type: integer
           description: ID of the candidate being reviewed.
         rating:
-          type: string
+          type:
+          - string
+          - 'null'
           description: Overall rating from the review.
-          nullable: true
         comments:
-          type: string
+          type:
+          - string
+          - 'null'
           description: Review comments.
-          nullable: true
         reviewer:
-          type: string
+          type:
+          - string
+          - 'null'
           description: Name or identifier of the reviewer.
-          nullable: true
         created_at:
           type: string
           format: date-time
           description: Timestamp when the review was created.
           readOnly: true
-  responses:
-    NotFound:
-      description: The requested resource could not be found.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    Unauthorized:
-      description: Authentication credentials were not provided or are invalid.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
   securitySchemes:
     apiKey:
       type: apiKey

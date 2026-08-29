@@ -1,6 +1,6 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
-  title: Trakstar Hire Auth Evaluations API
+  title: Trakstar Hire Evaluations API
   description: The Trakstar Hire REST API (formerly Recruiterbox) enables developers to manage openings, candidates, candidate messages, internal notes, interviews, reviews, evaluations, and to-dos programmatically. It returns JSON responses and uses API key authentication generated from the account's Super Admin settings. The most common use cases include building custom career sites and syncing opening or candidate data with external systems.
   version: '2'
   contact:
@@ -63,12 +63,6 @@ paths:
           $ref: '#/components/responses/Unauthorized'
 components:
   schemas:
-    Error:
-      type: object
-      properties:
-        detail:
-          type: string
-          description: Human-readable error message.
     Evaluation:
       type: object
       description: An evaluation of a candidate's qualifications.
@@ -81,18 +75,26 @@ components:
           type: integer
           description: ID of the candidate being evaluated.
         result:
-          type: string
+          type:
+          - string
+          - 'null'
           description: Result or score of the evaluation.
-          nullable: true
         notes:
-          type: string
+          type:
+          - string
+          - 'null'
           description: Notes from the evaluation.
-          nullable: true
         created_at:
           type: string
           format: date-time
           description: Timestamp when the evaluation was created.
           readOnly: true
+    Error:
+      type: object
+      properties:
+        detail:
+          type: string
+          description: Human-readable error message.
   responses:
     Unauthorized:
       description: Authentication credentials were not provided or are invalid.

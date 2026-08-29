@@ -1,6 +1,6 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
-  title: Trakstar Hire Auth To-Dos API
+  title: Trakstar Hire To Dos API
   description: The Trakstar Hire REST API (formerly Recruiterbox) enables developers to manage openings, candidates, candidate messages, internal notes, interviews, reviews, evaluations, and to-dos programmatically. It returns JSON responses and uses API key authentication generated from the account's Super Admin settings. The most common use cases include building custom career sites and syncing opening or candidate data with external systems.
   version: '2'
   contact:
@@ -86,6 +86,19 @@ paths:
         '404':
           $ref: '#/components/responses/NotFound'
 components:
+  responses:
+    NotFound:
+      description: The requested resource could not be found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Authentication credentials were not provided or are invalid.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   schemas:
     Error:
       type: object
@@ -108,10 +121,11 @@ components:
           type: string
           description: Title of the to-do item.
         due_date:
-          type: string
+          type:
+          - string
+          - 'null'
           format: date
           description: Due date of the to-do item.
-          nullable: true
         completed:
           type: boolean
           description: Whether the to-do has been completed.
@@ -121,19 +135,6 @@ components:
           format: date-time
           description: Timestamp when the to-do was created.
           readOnly: true
-  responses:
-    NotFound:
-      description: The requested resource could not be found.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    Unauthorized:
-      description: Authentication credentials were not provided or are invalid.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
   securitySchemes:
     apiKey:
       type: apiKey

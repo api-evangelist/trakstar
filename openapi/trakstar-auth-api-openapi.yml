@@ -1,20 +1,16 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
-  title: Trakstar Hire Auth API
-  description: The Trakstar Hire REST API (formerly Recruiterbox) enables developers to manage openings, candidates, candidate messages, internal notes, interviews, reviews, evaluations, and to-dos programmatically. It returns JSON responses and uses API key authentication generated from the account's Super Admin settings. The most common use cases include building custom career sites and syncing opening or candidate data with external systems.
-  version: '2'
+  title: Trakstar Learn Auth API
+  description: The Trakstar Learn REST API (based on the Mindflash platform) allows developers to manage user accounts, group assignments, course and module enrollments, user status, and reporting programmatically. The API supports pagination and filtering. API keys are provisioned by the Trakstar Learn support team upon request. The API enforces a rate limit of 10 requests per 10 seconds per API key.
+  version: '3'
   contact:
-    name: Trakstar Hire Support
-    url: https://support.hire.trakstar.com/article/1617-accessing-the-hire-api
+    name: Trakstar Learn Support
+    email: learn@trakstar.com
   license:
     name: Proprietary
 servers:
-- url: https://{companyName}.hire.trakstar.com/api/v2
-  description: Trakstar Hire API v2
-  variables:
-    companyName:
-      description: Your company subdomain name
-      default: yourcompany
+- url: https://api.mindflash.com/api/v3
+  description: Trakstar Learn (Mindflash) API v3
 security:
 - apiKey: []
 tags:
@@ -69,8 +65,8 @@ paths:
           $ref: '#/components/responses/TooManyRequests'
 components:
   responses:
-    TooManyRequests:
-      description: Rate limit exceeded. The API enforces a limit of 10 requests per 10 seconds per API key.
+    NotFound:
+      description: The requested resource could not be found.
       content:
         application/json:
           schema:
@@ -81,13 +77,23 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
-    NotFound:
-      description: The requested resource could not be found.
+    TooManyRequests:
+      description: Rate limit exceeded. The API enforces a limit of 10 requests per 10 seconds per API key.
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
   schemas:
+    Error:
+      type: object
+      properties:
+        message:
+          type: string
+          description: Human-readable error message.
+        errors:
+          type: array
+          items:
+            type: string
     AuthResponse:
       type: object
       description: SSO authentication response.
@@ -107,22 +113,12 @@ components:
           type: string
           format: uri
           description: Pre-authenticated URL to log the user into Trakstar Learn.
-    Error:
-      type: object
-      properties:
-        message:
-          type: string
-          description: Human-readable error message.
-        errors:
-          type: array
-          items:
-            type: string
   securitySchemes:
     apiKey:
       type: apiKey
       in: header
-      name: Authorization
-      description: API key generated from the Trakstar Hire Super Admin settings page. Pass as "ApiKey {your_api_key}".
+      name: x-mindflash-apikey
+      description: API key provisioned by Trakstar Learn support team. Contact learn@trakstar.com to request access.
 externalDocs:
-  description: Trakstar Hire API Reference
-  url: https://developers.recruiterbox.com/reference/introduction
+  description: Trakstar Learn API Documentation
+  url: https://support.learn.trakstar.com/article/815-workflow-api-documentation

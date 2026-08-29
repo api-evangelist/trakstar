@@ -1,6 +1,6 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
-  title: Trakstar Hire Auth Openings API
+  title: Trakstar Hire Openings API
   description: The Trakstar Hire REST API (formerly Recruiterbox) enables developers to manage openings, candidates, candidate messages, internal notes, interviews, reviews, evaluations, and to-dos programmatically. It returns JSON responses and uses API key authentication generated from the account's Super Admin settings. The most common use cases include building custom career sites and syncing opening or candidate data with external systems.
   version: '2'
   contact:
@@ -66,12 +66,14 @@ paths:
                     type: integer
                     description: Total number of openings matching the query.
                   next:
-                    type: string
-                    nullable: true
+                    type:
+                    - string
+                    - 'null'
                     description: URL for next page of results.
                   previous:
-                    type: string
-                    nullable: true
+                    type:
+                    - string
+                    - 'null'
                     description: URL for previous page of results.
                   results:
                     type: array
@@ -129,8 +131,8 @@ paths:
           $ref: '#/components/responses/NotFound'
 components:
   responses:
-    Unauthorized:
-      description: Authentication credentials were not provided or are invalid.
+    BadRequest:
+      description: The request was invalid or cannot be otherwise served.
       content:
         application/json:
           schema:
@@ -141,13 +143,19 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
-    BadRequest:
-      description: The request was invalid or cannot be otherwise served.
+    Unauthorized:
+      description: Authentication credentials were not provided or are invalid.
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
   schemas:
+    Error:
+      type: object
+      properties:
+        detail:
+          type: string
+          description: Human-readable error message.
     Opening:
       type: object
       description: A job opening / position in the Trakstar Hire system.
@@ -167,17 +175,20 @@ components:
           - closed
           - draft
         department:
-          type: string
+          type:
+          - string
+          - 'null'
           description: Department associated with this opening.
-          nullable: true
         location:
-          type: string
+          type:
+          - string
+          - 'null'
           description: Job location.
-          nullable: true
         description:
-          type: string
+          type:
+          - string
+          - 'null'
           description: Full job description.
-          nullable: true
         created_at:
           type: string
           format: date-time
@@ -188,12 +199,6 @@ components:
           format: date-time
           description: Timestamp when the opening was last updated.
           readOnly: true
-    Error:
-      type: object
-      properties:
-        detail:
-          type: string
-          description: Human-readable error message.
     OpeningInput:
       type: object
       required:
@@ -211,17 +216,20 @@ components:
           - draft
           default: draft
         department:
-          type: string
+          type:
+          - string
+          - 'null'
           description: Department associated with this opening.
-          nullable: true
         location:
-          type: string
+          type:
+          - string
+          - 'null'
           description: Job location.
-          nullable: true
         description:
-          type: string
+          type:
+          - string
+          - 'null'
           description: Full job description.
-          nullable: true
   securitySchemes:
     apiKey:
       type: apiKey

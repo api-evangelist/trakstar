@@ -1,20 +1,16 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
-  title: Trakstar Hire Auth Users API
-  description: The Trakstar Hire REST API (formerly Recruiterbox) enables developers to manage openings, candidates, candidate messages, internal notes, interviews, reviews, evaluations, and to-dos programmatically. It returns JSON responses and uses API key authentication generated from the account's Super Admin settings. The most common use cases include building custom career sites and syncing opening or candidate data with external systems.
-  version: '2'
+  title: Trakstar Learn Users API
+  description: The Trakstar Learn REST API (based on the Mindflash platform) allows developers to manage user accounts, group assignments, course and module enrollments, user status, and reporting programmatically. The API supports pagination and filtering. API keys are provisioned by the Trakstar Learn support team upon request. The API enforces a rate limit of 10 requests per 10 seconds per API key.
+  version: '3'
   contact:
-    name: Trakstar Hire Support
-    url: https://support.hire.trakstar.com/article/1617-accessing-the-hire-api
+    name: Trakstar Learn Support
+    email: learn@trakstar.com
   license:
     name: Proprietary
 servers:
-- url: https://{companyName}.hire.trakstar.com/api/v2
-  description: Trakstar Hire API v2
-  variables:
-    companyName:
-      description: Your company subdomain name
-      default: yourcompany
+- url: https://api.mindflash.com/api/v3
+  description: Trakstar Learn (Mindflash) API v3
 security:
 - apiKey: []
 tags:
@@ -203,59 +199,92 @@ paths:
         '429':
           $ref: '#/components/responses/TooManyRequests'
 components:
-  responses:
-    Unauthorized:
-      description: Authentication credentials were not provided or are invalid.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    TooManyRequests:
-      description: Rate limit exceeded. The API enforces a limit of 10 requests per 10 seconds per API key.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    NotFound:
-      description: The requested resource could not be found.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    BadRequest:
-      description: The request was invalid or cannot be otherwise served.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
   schemas:
-    CourseEnrollment:
+    User:
       type: object
-      description: A course enrollment for a user.
+      description: A user account in Trakstar Learn.
       properties:
         id:
           type: integer
           format: int64
-          description: Course ID.
+          description: Unique Mindflash user identifier.
+          readOnly: true
         name:
           type: string
-          description: Course name.
+          description: Full display name (Last, First format).
+          readOnly: true
+        firstName:
+          type: string
+          description: User's first name.
+        lastName:
+          type: string
+          description: User's last name.
+        username:
+          type: string
+          description: Unique username for login.
+        email:
+          type: string
+          format: email
+          description: User's email address.
         status:
           type: string
-          description: Enrollment/completion status.
-        required:
-          type: boolean
-          description: Whether the course is required for this user.
-        enrolledAt:
+          description: User's account status.
+          enum:
+          - Active
+          - Archived
+        type:
           type: string
-          format: date-time
-          description: When the user was enrolled.
-          nullable: true
-        completedAt:
+          description: User's role/type in the system.
+          enum:
+          - Trainee
+          - Trainer
+          - Manager
+          - Administrator
+          - Reporter
+          - Team Lead
+        isOwner:
+          type: integer
+          description: Whether this user is the account owner (1) or not (0).
+          enum:
+          - 0
+          - 1
+        groups:
+          type: array
+          description: Groups the user belongs to.
+          items:
+            $ref: '#/components/schemas/GroupSummary'
+      example:
+        id: 333
+        name: Doe, John
+        firstName: John
+        lastName: Doe
+        username: jdoe
+        email: jdoe@yourorg.com
+        status: Active
+        type: Trainee
+        isOwner: 0
+        groups: []
+    Error:
+      type: object
+      properties:
+        message:
           type: string
-          format: date-time
-          description: When the user completed the course.
-          nullable: true
+          description: Human-readable error message.
+        errors:
+          type: array
+          items:
+            type: string
+    UserDetail:
+      allOf:
+      - $ref: '#/components/schemas/User'
+      - type: object
+        description: Extended user information including courses.
+        properties:
+          courses:
+            type: array
+            description: Courses the user is enrolled in.
+            items:
+              $ref: '#/components/schemas/CourseEnrollment'
     NewUser:
       type: object
       required:
@@ -328,25 +357,6 @@ components:
         customfield9:
           type: string
           description: Custom field 9.
-    Error:
-      type: object
-      properties:
-        message:
-          type: string
-          description: Human-readable error message.
-        errors:
-          type: array
-          items:
-            type: string
-    GroupSummary:
-      type: object
-      description: Summary of a group (used within user objects).
-      properties:
-        id:
-          type: integer
-          format: int64
-        name:
-          type: string
     EditUserRequest:
       type: object
       description: Fields to update on an existing user account.
@@ -393,101 +403,35 @@ components:
           type: string
         customfield9:
           type: string
-    UserDetail:
-      allOf:
-      - $ref: '#/components/schemas/User'
-      - type: object
-        description: Extended user information including courses.
-        properties:
-          courses:
-            type: array
-            description: Courses the user is enrolled in.
-            items:
-              $ref: '#/components/schemas/CourseEnrollment'
-    AddUsersResponse:
+    CourseEnrollment:
       type: object
-      description: Response from adding users.
-      properties:
-        batchId:
-          type: integer
-          description: The batchId provided in the request.
-        usersAdded:
-          type: integer
-          description: Number of users successfully added.
-        errors:
-          type: array
-          description: Any errors encountered during the operation.
-          items:
-            type: object
-            properties:
-              email:
-                type: string
-              error:
-                type: string
-    User:
-      type: object
-      description: A user account in Trakstar Learn.
+      description: A course enrollment for a user.
       properties:
         id:
           type: integer
           format: int64
-          description: Unique Mindflash user identifier.
-          readOnly: true
+          description: Course ID.
         name:
           type: string
-          description: Full display name (Last, First format).
-          readOnly: true
-        firstName:
-          type: string
-          description: User's first name.
-        lastName:
-          type: string
-          description: User's last name.
-        username:
-          type: string
-          description: Unique username for login.
-        email:
-          type: string
-          format: email
-          description: User's email address.
+          description: Course name.
         status:
           type: string
-          description: User's account status.
-          enum:
-          - Active
-          - Archived
-        type:
-          type: string
-          description: User's role/type in the system.
-          enum:
-          - Trainee
-          - Trainer
-          - Manager
-          - Administrator
-          - Reporter
-          - Team Lead
-        isOwner:
-          type: integer
-          description: Whether this user is the account owner (1) or not (0).
-          enum:
-          - 0
-          - 1
-        groups:
-          type: array
-          description: Groups the user belongs to.
-          items:
-            $ref: '#/components/schemas/GroupSummary'
-      example:
-        id: 333
-        name: Doe, John
-        firstName: John
-        lastName: Doe
-        username: jdoe
-        email: jdoe@yourorg.com
-        status: Active
-        type: Trainee
-        isOwner: 0
-        groups: []
+          description: Enrollment/completion status.
+        required:
+          type: boolean
+          description: Whether the course is required for this user.
+        enrolledAt:
+          type:
+          - string
+          - 'null'
+          format: date-time
+          description: When the user was enrolled.
+        completedAt:
+          type:
+          - string
+          - 'null'
+          format: date-time
+          description: When the user completed the course.
     AddUsersRequest:
       type: object
       required:
@@ -526,12 +470,66 @@ components:
         batchId:
           type: integer
           description: Unique sequential number to identify this API call; returned in the response.
+    GroupSummary:
+      type: object
+      description: Summary of a group (used within user objects).
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+    AddUsersResponse:
+      type: object
+      description: Response from adding users.
+      properties:
+        batchId:
+          type: integer
+          description: The batchId provided in the request.
+        usersAdded:
+          type: integer
+          description: Number of users successfully added.
+        errors:
+          type: array
+          description: Any errors encountered during the operation.
+          items:
+            type: object
+            properties:
+              email:
+                type: string
+              error:
+                type: string
+  responses:
+    NotFound:
+      description: The requested resource could not be found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    BadRequest:
+      description: The request was invalid or cannot be otherwise served.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Authentication credentials were not provided or are invalid.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    TooManyRequests:
+      description: Rate limit exceeded. The API enforces a limit of 10 requests per 10 seconds per API key.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   securitySchemes:
     apiKey:
       type: apiKey
       in: header
-      name: Authorization
-      description: API key generated from the Trakstar Hire Super Admin settings page. Pass as "ApiKey {your_api_key}".
+      name: x-mindflash-apikey
+      description: API key provisioned by Trakstar Learn support team. Contact learn@trakstar.com to request access.
 externalDocs:
-  description: Trakstar Hire API Reference
-  url: https://developers.recruiterbox.com/reference/introduction
+  description: Trakstar Learn API Documentation
+  url: https://support.learn.trakstar.com/article/815-workflow-api-documentation
