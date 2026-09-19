@@ -46,6 +46,16 @@ created: '2026-06-13'
 modified: '2026-06-13'
 specificationVersion: '0.23'
 tags:
+  - Human Resources
+  - Performance Management
+  - Talent Management
+  - Applicant Tracking
+  - Learning Management
+  - 360 Feedback
+  - Goal Management
+  - Employee Development
+  - Performance Appraisal
+tags_raw:
   - HR
   - Human Resources
   - Performance Management
@@ -121,6 +131,8 @@ apis:
   humanURL: https://developers.recruiterbox.com/reference/introduction
   baseURL: https://companyname.hire.trakstar.com/api/v1/
   tags:
+  - Evaluation
+  tags_raw:
   - Evaluations
   properties:
   - type: OpenAPI
