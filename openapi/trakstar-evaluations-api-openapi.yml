@@ -63,6 +63,12 @@ paths:
           $ref: '#/components/responses/Unauthorized'
 components:
   schemas:
+    Error:
+      type: object
+      properties:
+        detail:
+          type: string
+          description: Human-readable error message.
     Evaluation:
       type: object
       description: An evaluation of a candidate's qualifications.
@@ -89,12 +95,6 @@ components:
           format: date-time
           description: Timestamp when the evaluation was created.
           readOnly: true
-    Error:
-      type: object
-      properties:
-        detail:
-          type: string
-          description: Human-readable error message.
   responses:
     Unauthorized:
       description: Authentication credentials were not provided or are invalid.

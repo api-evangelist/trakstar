@@ -65,8 +65,8 @@ paths:
           $ref: '#/components/responses/TooManyRequests'
 components:
   responses:
-    NotFound:
-      description: The requested resource could not be found.
+    TooManyRequests:
+      description: Rate limit exceeded. The API enforces a limit of 10 requests per 10 seconds per API key.
       content:
         application/json:
           schema:
@@ -77,8 +77,8 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
-    TooManyRequests:
-      description: Rate limit exceeded. The API enforces a limit of 10 requests per 10 seconds per API key.
+    NotFound:
+      description: The requested resource could not be found.
       content:
         application/json:
           schema:

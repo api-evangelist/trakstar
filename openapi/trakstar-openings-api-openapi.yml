@@ -137,25 +137,50 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
-    NotFound:
-      description: The requested resource could not be found.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
     Unauthorized:
       description: Authentication credentials were not provided or are invalid.
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
+    NotFound:
+      description: The requested resource could not be found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   schemas:
-    Error:
+    OpeningInput:
       type: object
+      required:
+      - title
       properties:
-        detail:
+        title:
           type: string
-          description: Human-readable error message.
+          description: Title of the job opening.
+        status:
+          type: string
+          description: Status of the opening.
+          enum:
+          - open
+          - closed
+          - draft
+          default: draft
+        department:
+          type:
+          - string
+          - 'null'
+          description: Department associated with this opening.
+        location:
+          type:
+          - string
+          - 'null'
+          description: Job location.
+        description:
+          type:
+          - string
+          - 'null'
+          description: Full job description.
     Opening:
       type: object
       description: A job opening / position in the Trakstar Hire system.
@@ -199,37 +224,12 @@ components:
           format: date-time
           description: Timestamp when the opening was last updated.
           readOnly: true
-    OpeningInput:
+    Error:
       type: object
-      required:
-      - title
       properties:
-        title:
+        detail:
           type: string
-          description: Title of the job opening.
-        status:
-          type: string
-          description: Status of the opening.
-          enum:
-          - open
-          - closed
-          - draft
-          default: draft
-        department:
-          type:
-          - string
-          - 'null'
-          description: Department associated with this opening.
-        location:
-          type:
-          - string
-          - 'null'
-          description: Job location.
-        description:
-          type:
-          - string
-          - 'null'
-          description: Full job description.
+          description: Human-readable error message.
   securitySchemes:
     apiKey:
       type: apiKey

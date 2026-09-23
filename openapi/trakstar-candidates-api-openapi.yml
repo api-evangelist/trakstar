@@ -175,62 +175,7 @@ paths:
         '404':
           $ref: '#/components/responses/NotFound'
 components:
-  responses:
-    BadRequest:
-      description: The request was invalid or cannot be otherwise served.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    NotFound:
-      description: The requested resource could not be found.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    Unauthorized:
-      description: Authentication credentials were not provided or are invalid.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
   schemas:
-    Error:
-      type: object
-      properties:
-        detail:
-          type: string
-          description: Human-readable error message.
-    CandidateInput:
-      type: object
-      required:
-      - first_name
-      - last_name
-      - opening
-      properties:
-        first_name:
-          type: string
-          description: Candidate's first name.
-        last_name:
-          type: string
-          description: Candidate's last name.
-        email:
-          type: string
-          format: email
-          description: Candidate's email address.
-        phone:
-          type:
-          - string
-          - 'null'
-          description: Candidate's phone number.
-        opening:
-          type: integer
-          description: ID of the opening the candidate is applying to.
-        source:
-          type:
-          - string
-          - 'null'
-          description: Source of the candidate application.
     Candidate:
       type: object
       description: A candidate applying to a job opening.
@@ -277,6 +222,61 @@ components:
           format: date-time
           description: Timestamp when the candidate record was last updated.
           readOnly: true
+    Error:
+      type: object
+      properties:
+        detail:
+          type: string
+          description: Human-readable error message.
+    CandidateInput:
+      type: object
+      required:
+      - first_name
+      - last_name
+      - opening
+      properties:
+        first_name:
+          type: string
+          description: Candidate's first name.
+        last_name:
+          type: string
+          description: Candidate's last name.
+        email:
+          type: string
+          format: email
+          description: Candidate's email address.
+        phone:
+          type:
+          - string
+          - 'null'
+          description: Candidate's phone number.
+        opening:
+          type: integer
+          description: ID of the opening the candidate is applying to.
+        source:
+          type:
+          - string
+          - 'null'
+          description: Source of the candidate application.
+  responses:
+    BadRequest:
+      description: The request was invalid or cannot be otherwise served.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Authentication credentials were not provided or are invalid.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: The requested resource could not be found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   securitySchemes:
     apiKey:
       type: apiKey

@@ -18,7 +18,7 @@ servers:
 security:
 - apiKey: []
 tags:
-- name: To-Dos
+- name: To Dos
   description: Manage to-do items
 paths:
   /todos:
@@ -27,7 +27,7 @@ paths:
       summary: List To-Dos
       description: Returns a list of to-do items, optionally filtered by candidate.
       tags:
-      - To-Dos
+      - To Dos
       parameters:
       - name: candidate
         in: query
@@ -67,7 +67,7 @@ paths:
       summary: Get To-Do
       description: Returns a single to-do item by ID.
       tags:
-      - To-Dos
+      - To Dos
       parameters:
       - name: id
         in: path
@@ -86,19 +86,6 @@ paths:
         '404':
           $ref: '#/components/responses/NotFound'
 components:
-  responses:
-    NotFound:
-      description: The requested resource could not be found.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    Unauthorized:
-      description: Authentication credentials were not provided or are invalid.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
   schemas:
     Error:
       type: object
@@ -135,6 +122,19 @@ components:
           format: date-time
           description: Timestamp when the to-do was created.
           readOnly: true
+  responses:
+    Unauthorized:
+      description: Authentication credentials were not provided or are invalid.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: The requested resource could not be found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   securitySchemes:
     apiKey:
       type: apiKey

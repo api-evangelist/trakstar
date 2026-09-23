@@ -214,16 +214,6 @@ components:
           enum:
           - Active
           - Archive
-    Error:
-      type: object
-      properties:
-        message:
-          type: string
-          description: Human-readable error message.
-        errors:
-          type: array
-          items:
-            type: string
     CourseDetail:
       allOf:
       - $ref: '#/components/schemas/Course'
@@ -242,6 +232,16 @@ components:
                   type: string
                 type:
                   type: string
+    Error:
+      type: object
+      properties:
+        message:
+          type: string
+          description: Human-readable error message.
+        errors:
+          type: array
+          items:
+            type: string
   responses:
     BadRequest:
       description: The request was invalid or cannot be otherwise served.
@@ -249,8 +249,8 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
-    NotFound:
-      description: The requested resource could not be found.
+    TooManyRequests:
+      description: Rate limit exceeded. The API enforces a limit of 10 requests per 10 seconds per API key.
       content:
         application/json:
           schema:
@@ -261,8 +261,8 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
-    TooManyRequests:
-      description: Rate limit exceeded. The API enforces a limit of 10 requests per 10 seconds per API key.
+    NotFound:
+      description: The requested resource could not be found.
       content:
         application/json:
           schema:
