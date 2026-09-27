@@ -200,110 +200,6 @@ paths:
           $ref: '#/components/responses/TooManyRequests'
 components:
   schemas:
-    CourseEnrollment:
-      type: object
-      description: A course enrollment for a user.
-      properties:
-        id:
-          type: integer
-          format: int64
-          description: Course ID.
-        name:
-          type: string
-          description: Course name.
-        status:
-          type: string
-          description: Enrollment/completion status.
-        required:
-          type: boolean
-          description: Whether the course is required for this user.
-        enrolledAt:
-          type:
-          - string
-          - 'null'
-          format: date-time
-          description: When the user was enrolled.
-        completedAt:
-          type:
-          - string
-          - 'null'
-          format: date-time
-          description: When the user completed the course.
-    AddUsersResponse:
-      type: object
-      description: Response from adding users.
-      properties:
-        batchId:
-          type: integer
-          description: The batchId provided in the request.
-        usersAdded:
-          type: integer
-          description: Number of users successfully added.
-        errors:
-          type: array
-          description: Any errors encountered during the operation.
-          items:
-            type: object
-            properties:
-              email:
-                type: string
-              error:
-                type: string
-    GroupSummary:
-      type: object
-      description: Summary of a group (used within user objects).
-      properties:
-        id:
-          type: integer
-          format: int64
-        name:
-          type: string
-    EditUserRequest:
-      type: object
-      description: Fields to update on an existing user account.
-      properties:
-        firstName:
-          type: string
-          maxLength: 35
-        lastName:
-          type: string
-          maxLength: 35
-        email:
-          type: string
-          format: email
-          maxLength: 254
-        username:
-          type: string
-          maxLength: 254
-        permissions:
-          type: integer
-          enum:
-          - 169000100
-          - 169000200
-          - 169000300
-          - 169000400
-          - 169000500
-          - 169000600
-        customfield0:
-          type: string
-        customfield1:
-          type: string
-        customfield2:
-          type: string
-        customfield3:
-          type: string
-        customfield4:
-          type: string
-        customfield5:
-          type: string
-        customfield6:
-          type: string
-        customfield7:
-          type: string
-        customfield8:
-          type: string
-        customfield9:
-          type: string
     AddUsersRequest:
       type: object
       required:
@@ -342,6 +238,65 @@ components:
         batchId:
           type: integer
           description: Unique sequential number to identify this API call; returned in the response.
+    CourseEnrollment:
+      type: object
+      description: A course enrollment for a user.
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: Course ID.
+        name:
+          type: string
+          description: Course name.
+        status:
+          type: string
+          description: Enrollment/completion status.
+        required:
+          type: boolean
+          description: Whether the course is required for this user.
+        enrolledAt:
+          type:
+          - string
+          - 'null'
+          format: date-time
+          description: When the user was enrolled.
+        completedAt:
+          type:
+          - string
+          - 'null'
+          format: date-time
+          description: When the user completed the course.
+    Error:
+      type: object
+      properties:
+        message:
+          type: string
+          description: Human-readable error message.
+        errors:
+          type: array
+          items:
+            type: string
+    AddUsersResponse:
+      type: object
+      description: Response from adding users.
+      properties:
+        batchId:
+          type: integer
+          description: The batchId provided in the request.
+        usersAdded:
+          type: integer
+          description: Number of users successfully added.
+        errors:
+          type: array
+          description: Any errors encountered during the operation.
+          items:
+            type: object
+            properties:
+              email:
+                type: string
+              error:
+                type: string
     NewUser:
       type: object
       required:
@@ -414,6 +369,26 @@ components:
         customfield9:
           type: string
           description: Custom field 9.
+    GroupSummary:
+      type: object
+      description: Summary of a group (used within user objects).
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+    UserDetail:
+      allOf:
+      - $ref: '#/components/schemas/User'
+      - type: object
+        description: Extended user information including courses.
+        properties:
+          courses:
+            type: array
+            description: Courses the user is enrolled in.
+            items:
+              $ref: '#/components/schemas/CourseEnrollment'
     User:
       type: object
       description: A user account in Trakstar Learn.
@@ -478,48 +453,73 @@ components:
         type: Trainee
         isOwner: 0
         groups: []
-    Error:
+    EditUserRequest:
       type: object
+      description: Fields to update on an existing user account.
       properties:
-        message:
+        firstName:
           type: string
-          description: Human-readable error message.
-        errors:
-          type: array
-          items:
-            type: string
-    UserDetail:
-      allOf:
-      - $ref: '#/components/schemas/User'
-      - type: object
-        description: Extended user information including courses.
-        properties:
-          courses:
-            type: array
-            description: Courses the user is enrolled in.
-            items:
-              $ref: '#/components/schemas/CourseEnrollment'
+          maxLength: 35
+        lastName:
+          type: string
+          maxLength: 35
+        email:
+          type: string
+          format: email
+          maxLength: 254
+        username:
+          type: string
+          maxLength: 254
+        permissions:
+          type: integer
+          enum:
+          - 169000100
+          - 169000200
+          - 169000300
+          - 169000400
+          - 169000500
+          - 169000600
+        customfield0:
+          type: string
+        customfield1:
+          type: string
+        customfield2:
+          type: string
+        customfield3:
+          type: string
+        customfield4:
+          type: string
+        customfield5:
+          type: string
+        customfield6:
+          type: string
+        customfield7:
+          type: string
+        customfield8:
+          type: string
+        customfield9:
+          type: string
   responses:
-    BadRequest:
-      description: The request was invalid or cannot be otherwise served.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
     TooManyRequests:
       description: Rate limit exceeded. The API enforces a limit of 10 requests per 10 seconds per API key.
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
-    NotFound:
-      description: The requested resource could not be found.
+    Unauthorized:
+      description: Authentication credentials were not provided or are invalid.
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
-    Unauthorized:
-      description: Authentication credentials were not provided or are invalid.
+    BadRequest:
+      description: The request was invalid or cannot be otherwise served.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: The requested resource could not be found.
       content:
         application/json:
           schema:
