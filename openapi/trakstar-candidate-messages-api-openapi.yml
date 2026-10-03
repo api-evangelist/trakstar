@@ -100,12 +100,6 @@ components:
           schema:
             $ref: '#/components/schemas/Error'
   schemas:
-    Error:
-      type: object
-      properties:
-        detail:
-          type: string
-          description: Human-readable error message.
     CandidateMessage:
       type: object
       description: A message sent to a candidate.
@@ -128,6 +122,12 @@ components:
           format: date-time
           description: Timestamp when the message was sent.
           readOnly: true
+    Error:
+      type: object
+      properties:
+        detail:
+          type: string
+          description: Human-readable error message.
   securitySchemes:
     apiKey:
       type: apiKey
