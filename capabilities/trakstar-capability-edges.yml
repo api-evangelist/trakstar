@@ -1,0 +1,94 @@
+slug: trakstar
+provider: Trakstar
+generated_by: planning/capability-mapping/scripts/classify_capabilities.py
+model: claude-opus-5
+frame:
+- Software & Technology
+min_confidence: 0.7
+capability_model:
+  source: https://github.com/vincentmakes/turbo-ea-capabilities
+  license: CC-BY-4.0
+  attribution: Turbo EA Capabilities by Vincent Verdet — Turbo EA, https://github.com/vincentmakes/turbo-ea-capabilities,
+    CC BY 4.0
+  notice: NOTICE
+edge_count: 8
+edges:
+- tag: Candidates
+  spec_file: trakstar-candidates-api-openapi.yml
+  capability_id: BC-300.10
+  capability_id_l1: BC-300
+  capability_name: Talent Acquisition Management
+  confidence: 0.95
+  evidence: POST /candidates  createCandidate  Create Candidate
+  reason: Full CRUD over job candidates in an applicant tracking system ('formerly Recruiterbox', used
+    for 'building custom career sites and syncing opening or candidate data'), which is squarely sourcing/recruiting/hiring.
+- tag: Openings
+  spec_file: trakstar-openings-api-openapi.yml
+  capability_id: BC-300.10
+  capability_id_l1: BC-300
+  capability_name: Talent Acquisition Management
+  confidence: 0.92
+  evidence: '"POST /openings createOpening Create Opening"; API "enables developers to manage openings,
+    candidates ..." and is used for "building custom career sites"'
+  reason: Job requisition/opening management in an ATS is core recruiting and hiring — talent acquisition.
+- tag: Courses
+  spec_file: trakstar-courses-api-openapi.yml
+  capability_id: BC-300.40
+  capability_id_l1: BC-300
+  capability_name: Learning & Development Management
+  confidence: 0.9
+  evidence: POST /course/{courseId}/user/{userId}  inviteUserToCourse  Invite User to Course
+  reason: Trakstar Learn LMS course catalogue and enrolment of users into courses — training and capability
+    building, i.e. Learning & Development Management.
+- tag: Interviews
+  spec_file: trakstar-interviews-api-openapi.yml
+  capability_id: BC-300.10
+  capability_id_l1: BC-300
+  capability_name: Talent Acquisition Management
+  confidence: 0.88
+  evidence: operations "List Interviews" / "Get Interview" in the Trakstar Hire API which "enables developers
+    to manage openings, candidates, ... interviews"
+  reason: Interview records inside an applicant tracking system are plainly part of the recruiting/hiring
+    process, i.e. talent acquisition.
+- tag: Candidate Messages
+  spec_file: trakstar-candidate-messages-api-openapi.yml
+  capability_id: BC-300.10
+  capability_id_l1: BC-300
+  capability_name: Talent Acquisition Management
+  confidence: 0.8
+  evidence: GET /candidatemessages  listCandidateMessages  List Candidate Messages
+  reason: Messages exchanged with job candidates in the Trakstar Hire applicant tracking system, which
+    the description frames as managing 'openings, candidates, candidate messages' — recruiting communication
+    within talent acquisition.
+- tag: Evaluations
+  spec_file: trakstar-evaluations-api-openapi.yml
+  capability_id: BC-300.10
+  capability_id_l1: BC-300
+  capability_name: Talent Acquisition Management
+  confidence: 0.75
+  evidence: GET /evaluations  listEvaluations  List Evaluations
+  reason: These are Trakstar Hire evaluations listed alongside 'interviews, reviews, evaluations' in the
+    ATS description, so they are candidate assessment artefacts in the hiring process rather than employee
+    performance appraisals.
+- tag: Internal Notes
+  spec_file: trakstar-internal-notes-api-openapi.yml
+  capability_id: BC-300.10
+  capability_id_l1: BC-300
+  capability_name: Talent Acquisition Management
+  confidence: 0.72
+  evidence: '"enables developers to manage openings, candidates, candidate messages, internal notes, interviews,
+    reviews, evaluations"'
+  reason: Trakstar Hire is an applicant tracking system; internal notes are recruiter annotations on candidates
+    in the hiring pipeline, which sits in talent acquisition. Read-only note retrieval is thin evidence,
+    hence moderate confidence.
+- tag: Reviews
+  spec_file: trakstar-reviews-api-openapi.yml
+  capability_id: BC-300.10
+  capability_id_l1: BC-300
+  capability_name: Talent Acquisition Management
+  confidence: 0.72
+  evidence: Trakstar Hire API "manage openings, candidates, candidate messages, internal notes, interviews,
+    reviews, evaluations"
+  reason: In the Hire (ATS) spec, Reviews are candidate reviews/evaluations in the hiring workflow rather
+    than employee performance appraisals, so talent acquisition fits; some ambiguity with performance
+    management given the vendor's other products.

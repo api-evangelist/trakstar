@@ -244,6 +244,9 @@ apis:
   - type: Documentation
     url: https://support.learn.trakstar.com/article/815-workflow-api-documentation
 common:
+  - type: CapabilityMap
+    url: capabilities/trakstar-capability-edges.yml
+    name: Trakstar Business Capability Map
   - type: AgenticAccess
     url: agentic-access/trakstar-agentic-access.yml
   - type: TrustCenter
