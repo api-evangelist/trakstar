@@ -199,174 +199,63 @@ paths:
         '429':
           $ref: '#/components/responses/TooManyRequests'
 components:
-  responses:
-    BadRequest:
-      description: The request was invalid or cannot be otherwise served.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    TooManyRequests:
-      description: Rate limit exceeded. The API enforces a limit of 10 requests per 10 seconds per API key.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    NotFound:
-      description: The requested resource could not be found.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    Unauthorized:
-      description: Authentication credentials were not provided or are invalid.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
   schemas:
-    CourseEnrollment:
+    Error:
       type: object
-      description: A course enrollment for a user.
       properties:
-        id:
-          type: integer
-          format: int64
-          description: Course ID.
-        name:
+        message:
           type: string
-          description: Course name.
-        status:
-          type: string
-          description: Enrollment/completion status.
-        required:
-          type: boolean
-          description: Whether the course is required for this user.
-        enrolledAt:
-          type:
-          - string
-          - 'null'
-          format: date-time
-          description: When the user was enrolled.
-        completedAt:
-          type:
-          - string
-          - 'null'
-          format: date-time
-          description: When the user completed the course.
-    UserDetail:
-      allOf:
-      - $ref: '#/components/schemas/User'
-      - type: object
-        description: Extended user information including courses.
-        properties:
-          courses:
-            type: array
-            description: Courses the user is enrolled in.
-            items:
-              $ref: '#/components/schemas/CourseEnrollment'
-    User:
+          description: Human-readable error message.
+        errors:
+          type: array
+          items:
+            type: string
+    EditUserRequest:
       type: object
-      description: A user account in Trakstar Learn.
+      description: Fields to update on an existing user account.
       properties:
-        id:
-          type: integer
-          format: int64
-          description: Unique Mindflash user identifier.
-          readOnly: true
-        name:
-          type: string
-          description: Full display name (Last, First format).
-          readOnly: true
         firstName:
           type: string
-          description: User's first name.
+          maxLength: 35
         lastName:
           type: string
-          description: User's last name.
-        username:
-          type: string
-          description: Unique username for login.
+          maxLength: 35
         email:
           type: string
           format: email
-          description: User's email address.
-        status:
+          maxLength: 254
+        username:
           type: string
-          description: User's account status.
-          enum:
-          - Active
-          - Archived
-        type:
-          type: string
-          description: User's role/type in the system.
-          enum:
-          - Trainee
-          - Trainer
-          - Manager
-          - Administrator
-          - Reporter
-          - Team Lead
-        isOwner:
+          maxLength: 254
+        permissions:
           type: integer
-          description: Whether this user is the account owner (1) or not (0).
           enum:
-          - 0
-          - 1
-        groups:
-          type: array
-          description: Groups the user belongs to.
-          items:
-            $ref: '#/components/schemas/GroupSummary'
-      example:
-        id: 333
-        name: Doe, John
-        firstName: John
-        lastName: Doe
-        username: jdoe
-        email: jdoe@yourorg.com
-        status: Active
-        type: Trainee
-        isOwner: 0
-        groups: []
-    AddUsersRequest:
-      type: object
-      required:
-      - users
-      - clientDatestamp
-      description: Request body for adding one or more users.
-      properties:
-        users:
-          type: array
-          maxItems: 200
-          description: List of users to add. Maximum 200 users per call.
-          items:
-            $ref: '#/components/schemas/NewUser'
-        requiredCourseIds:
-          type: array
-          description: Course IDs to enroll users in with required flag enabled.
-          items:
-            type: integer
-            format: int64
-        courseIds:
-          type: array
-          description: Course IDs to enroll users in with required flag disabled.
-          items:
-            type: integer
-            format: int64
-        groupIds:
-          type: array
-          description: Group IDs to place the users in.
-          items:
-            type: integer
-            format: int64
-        clientDatestamp:
+          - 169000100
+          - 169000200
+          - 169000300
+          - 169000400
+          - 169000500
+          - 169000600
+        customfield0:
           type: string
-          format: date
-          description: The current date in YYYY-MM-DD format.
-        batchId:
-          type: integer
-          description: Unique sequential number to identify this API call; returned in the response.
+        customfield1:
+          type: string
+        customfield2:
+          type: string
+        customfield3:
+          type: string
+        customfield4:
+          type: string
+        customfield5:
+          type: string
+        customfield6:
+          type: string
+        customfield7:
+          type: string
+        customfield8:
+          type: string
+        customfield9:
+          type: string
     NewUser:
       type: object
       required:
@@ -439,62 +328,99 @@ components:
         customfield9:
           type: string
           description: Custom field 9.
-    Error:
+    User:
       type: object
+      description: A user account in Trakstar Learn.
       properties:
-        message:
+        id:
+          type: integer
+          format: int64
+          description: Unique Mindflash user identifier.
+          readOnly: true
+        name:
           type: string
-          description: Human-readable error message.
-        errors:
-          type: array
-          items:
-            type: string
-    EditUserRequest:
-      type: object
-      description: Fields to update on an existing user account.
-      properties:
+          description: Full display name (Last, First format).
+          readOnly: true
         firstName:
           type: string
-          maxLength: 35
+          description: User's first name.
         lastName:
           type: string
-          maxLength: 35
+          description: User's last name.
+        username:
+          type: string
+          description: Unique username for login.
         email:
           type: string
           format: email
-          maxLength: 254
-        username:
+          description: User's email address.
+        status:
           type: string
-          maxLength: 254
-        permissions:
-          type: integer
+          description: User's account status.
           enum:
-          - 169000100
-          - 169000200
-          - 169000300
-          - 169000400
-          - 169000500
-          - 169000600
-        customfield0:
+          - Active
+          - Archived
+        type:
           type: string
-        customfield1:
+          description: User's role/type in the system.
+          enum:
+          - Trainee
+          - Trainer
+          - Manager
+          - Administrator
+          - Reporter
+          - Team Lead
+        isOwner:
+          type: integer
+          description: Whether this user is the account owner (1) or not (0).
+          enum:
+          - 0
+          - 1
+        groups:
+          type: array
+          description: Groups the user belongs to.
+          items:
+            $ref: '#/components/schemas/GroupSummary'
+      example:
+        id: 333
+        name: Doe, John
+        firstName: John
+        lastName: Doe
+        username: jdoe
+        email: jdoe@yourorg.com
+        status: Active
+        type: Trainee
+        isOwner: 0
+        groups: []
+    CourseEnrollment:
+      type: object
+      description: A course enrollment for a user.
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: Course ID.
+        name:
           type: string
-        customfield2:
+          description: Course name.
+        status:
           type: string
-        customfield3:
-          type: string
-        customfield4:
-          type: string
-        customfield5:
-          type: string
-        customfield6:
-          type: string
-        customfield7:
-          type: string
-        customfield8:
-          type: string
-        customfield9:
-          type: string
+          description: Enrollment/completion status.
+        required:
+          type: boolean
+          description: Whether the course is required for this user.
+        enrolledAt:
+          type:
+          - string
+          - 'null'
+          format: date-time
+          description: When the user was enrolled.
+        completedAt:
+          type:
+          - string
+          - 'null'
+          format: date-time
+          description: When the user completed the course.
     GroupSummary:
       type: object
       description: Summary of a group (used within user objects).
@@ -524,6 +450,80 @@ components:
                 type: string
               error:
                 type: string
+    AddUsersRequest:
+      type: object
+      required:
+      - users
+      - clientDatestamp
+      description: Request body for adding one or more users.
+      properties:
+        users:
+          type: array
+          maxItems: 200
+          description: List of users to add. Maximum 200 users per call.
+          items:
+            $ref: '#/components/schemas/NewUser'
+        requiredCourseIds:
+          type: array
+          description: Course IDs to enroll users in with required flag enabled.
+          items:
+            type: integer
+            format: int64
+        courseIds:
+          type: array
+          description: Course IDs to enroll users in with required flag disabled.
+          items:
+            type: integer
+            format: int64
+        groupIds:
+          type: array
+          description: Group IDs to place the users in.
+          items:
+            type: integer
+            format: int64
+        clientDatestamp:
+          type: string
+          format: date
+          description: The current date in YYYY-MM-DD format.
+        batchId:
+          type: integer
+          description: Unique sequential number to identify this API call; returned in the response.
+    UserDetail:
+      allOf:
+      - $ref: '#/components/schemas/User'
+      - type: object
+        description: Extended user information including courses.
+        properties:
+          courses:
+            type: array
+            description: Courses the user is enrolled in.
+            items:
+              $ref: '#/components/schemas/CourseEnrollment'
+  responses:
+    BadRequest:
+      description: The request was invalid or cannot be otherwise served.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: The requested resource could not be found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    TooManyRequests:
+      description: Rate limit exceeded. The API enforces a limit of 10 requests per 10 seconds per API key.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Authentication credentials were not provided or are invalid.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   securitySchemes:
     apiKey:
       type: apiKey
