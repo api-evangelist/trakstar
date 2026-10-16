@@ -1,24 +1,22 @@
-# Kin Score artifact — trakstar — 2026-09-08T232836
+# Kin Score artifact — trakstar — 2026-10-11T110117
 # The API Evangelist rating (https://github.com/api-evangelist/kin-score). Generated; do not edit.
 ---
 kin_score:
   slug: trakstar
-  schema_version: 0.20.0
-  scored_at: '2026-09-08'
-  run_ts: 2026-09-08T232836
-  composite: 46.3
+  schema_version: 0.23.0
+  scored_at: '2026-10-11'
+  run_ts: 2026-10-11T110117
+  composite: 42.4
   band: developing
   facets:
-    discoverability: 68.5
-    contract_quality: 64.6
-    governance: 25.0
+    discoverability: 66.1
+    contract_quality: 59.0
+    contract_governance: 23.5
     operational_transparency: 21.1
     developer_ergonomics: 23.8
-    commercial_clarity: 57.9
-    contract_governance: 25.0
-    access_clarity: 57.9
+    access_clarity: 54.7
   agent_readiness:
-    score: 22.3
+    score: 20.4
     band: agent-aware
     dimensions:
       spec_presence: true
@@ -29,7 +27,7 @@ kin_score:
       idempotency: false
       error_semantics: false
       openapi_examples: partial
-      rate_limit_signal: documented
+      rate_limit_signal: derived
       event_surface_described: false
       agent_skills: false
       well_known_catalog: false
@@ -44,7 +42,7 @@ kin_score:
     applies: true
     regime: Education & Research
     regime_id: education
-    score: 40.7
+    score: 21.6
     matched_via: tags
   provenance:
     agentic_access: derived
