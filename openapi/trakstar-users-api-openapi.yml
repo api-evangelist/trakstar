@@ -200,62 +200,73 @@ paths:
           $ref: '#/components/responses/TooManyRequests'
 components:
   schemas:
-    Error:
+    AddUsersRequest:
       type: object
+      required:
+      - users
+      - clientDatestamp
+      description: Request body for adding one or more users.
       properties:
-        message:
+        users:
+          type: array
+          maxItems: 200
+          description: List of users to add. Maximum 200 users per call.
+          items:
+            $ref: '#/components/schemas/NewUser'
+        requiredCourseIds:
+          type: array
+          description: Course IDs to enroll users in with required flag enabled.
+          items:
+            type: integer
+            format: int64
+        courseIds:
+          type: array
+          description: Course IDs to enroll users in with required flag disabled.
+          items:
+            type: integer
+            format: int64
+        groupIds:
+          type: array
+          description: Group IDs to place the users in.
+          items:
+            type: integer
+            format: int64
+        clientDatestamp:
           type: string
-          description: Human-readable error message.
+          format: date
+          description: The current date in YYYY-MM-DD format.
+        batchId:
+          type: integer
+          description: Unique sequential number to identify this API call; returned in the response.
+    GroupSummary:
+      type: object
+      description: Summary of a group (used within user objects).
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+    AddUsersResponse:
+      type: object
+      description: Response from adding users.
+      properties:
+        batchId:
+          type: integer
+          description: The batchId provided in the request.
+        usersAdded:
+          type: integer
+          description: Number of users successfully added.
         errors:
           type: array
+          description: Any errors encountered during the operation.
           items:
-            type: string
-    EditUserRequest:
-      type: object
-      description: Fields to update on an existing user account.
-      properties:
-        firstName:
-          type: string
-          maxLength: 35
-        lastName:
-          type: string
-          maxLength: 35
-        email:
-          type: string
-          format: email
-          maxLength: 254
-        username:
-          type: string
-          maxLength: 254
-        permissions:
-          type: integer
-          enum:
-          - 169000100
-          - 169000200
-          - 169000300
-          - 169000400
-          - 169000500
-          - 169000600
-        customfield0:
-          type: string
-        customfield1:
-          type: string
-        customfield2:
-          type: string
-        customfield3:
-          type: string
-        customfield4:
-          type: string
-        customfield5:
-          type: string
-        customfield6:
-          type: string
-        customfield7:
-          type: string
-        customfield8:
-          type: string
-        customfield9:
-          type: string
+            type: object
+            properties:
+              email:
+                type: string
+              error:
+                type: string
     NewUser:
       type: object
       required:
@@ -328,6 +339,91 @@ components:
         customfield9:
           type: string
           description: Custom field 9.
+    EditUserRequest:
+      type: object
+      description: Fields to update on an existing user account.
+      properties:
+        firstName:
+          type: string
+          maxLength: 35
+        lastName:
+          type: string
+          maxLength: 35
+        email:
+          type: string
+          format: email
+          maxLength: 254
+        username:
+          type: string
+          maxLength: 254
+        permissions:
+          type: integer
+          enum:
+          - 169000100
+          - 169000200
+          - 169000300
+          - 169000400
+          - 169000500
+          - 169000600
+        customfield0:
+          type: string
+        customfield1:
+          type: string
+        customfield2:
+          type: string
+        customfield3:
+          type: string
+        customfield4:
+          type: string
+        customfield5:
+          type: string
+        customfield6:
+          type: string
+        customfield7:
+          type: string
+        customfield8:
+          type: string
+        customfield9:
+          type: string
+    Error:
+      type: object
+      properties:
+        message:
+          type: string
+          description: Human-readable error message.
+        errors:
+          type: array
+          items:
+            type: string
+    CourseEnrollment:
+      type: object
+      description: A course enrollment for a user.
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: Course ID.
+        name:
+          type: string
+          description: Course name.
+        status:
+          type: string
+          description: Enrollment/completion status.
+        required:
+          type: boolean
+          description: Whether the course is required for this user.
+        enrolledAt:
+          type:
+          - string
+          - 'null'
+          format: date-time
+          description: When the user was enrolled.
+        completedAt:
+          type:
+          - string
+          - 'null'
+          format: date-time
+          description: When the user completed the course.
     User:
       type: object
       description: A user account in Trakstar Learn.
@@ -392,102 +488,6 @@ components:
         type: Trainee
         isOwner: 0
         groups: []
-    CourseEnrollment:
-      type: object
-      description: A course enrollment for a user.
-      properties:
-        id:
-          type: integer
-          format: int64
-          description: Course ID.
-        name:
-          type: string
-          description: Course name.
-        status:
-          type: string
-          description: Enrollment/completion status.
-        required:
-          type: boolean
-          description: Whether the course is required for this user.
-        enrolledAt:
-          type:
-          - string
-          - 'null'
-          format: date-time
-          description: When the user was enrolled.
-        completedAt:
-          type:
-          - string
-          - 'null'
-          format: date-time
-          description: When the user completed the course.
-    GroupSummary:
-      type: object
-      description: Summary of a group (used within user objects).
-      properties:
-        id:
-          type: integer
-          format: int64
-        name:
-          type: string
-    AddUsersResponse:
-      type: object
-      description: Response from adding users.
-      properties:
-        batchId:
-          type: integer
-          description: The batchId provided in the request.
-        usersAdded:
-          type: integer
-          description: Number of users successfully added.
-        errors:
-          type: array
-          description: Any errors encountered during the operation.
-          items:
-            type: object
-            properties:
-              email:
-                type: string
-              error:
-                type: string
-    AddUsersRequest:
-      type: object
-      required:
-      - users
-      - clientDatestamp
-      description: Request body for adding one or more users.
-      properties:
-        users:
-          type: array
-          maxItems: 200
-          description: List of users to add. Maximum 200 users per call.
-          items:
-            $ref: '#/components/schemas/NewUser'
-        requiredCourseIds:
-          type: array
-          description: Course IDs to enroll users in with required flag enabled.
-          items:
-            type: integer
-            format: int64
-        courseIds:
-          type: array
-          description: Course IDs to enroll users in with required flag disabled.
-          items:
-            type: integer
-            format: int64
-        groupIds:
-          type: array
-          description: Group IDs to place the users in.
-          items:
-            type: integer
-            format: int64
-        clientDatestamp:
-          type: string
-          format: date
-          description: The current date in YYYY-MM-DD format.
-        batchId:
-          type: integer
-          description: Unique sequential number to identify this API call; returned in the response.
     UserDetail:
       allOf:
       - $ref: '#/components/schemas/User'
@@ -500,6 +500,12 @@ components:
             items:
               $ref: '#/components/schemas/CourseEnrollment'
   responses:
+    Unauthorized:
+      description: Authentication credentials were not provided or are invalid.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
     BadRequest:
       description: The request was invalid or cannot be otherwise served.
       content:
@@ -514,12 +520,6 @@ components:
             $ref: '#/components/schemas/Error'
     TooManyRequests:
       description: Rate limit exceeded. The API enforces a limit of 10 requests per 10 seconds per API key.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    Unauthorized:
-      description: Authentication credentials were not provided or are invalid.
       content:
         application/json:
           schema:
